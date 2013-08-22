@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>masteryoda's blog</title>
+    <title>masteryoda's blog - database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -64,7 +64,7 @@
           <div class="nav-collapse">
             <ul class="nav">
                                                                     <li class="divider-vertical"></li>
-                                              <li >
+                                              <li class="active">
                     <a href="http://masteryodacn.github.io/category/database.html">
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
@@ -89,10 +89,54 @@
     <div class="container-fluid">
       <div class="row">
         <div class="span9" id="content">
-            <ul>
-<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+                            <div class="article">
+                <h1><a href="http://masteryodacn.github.io/database/transaction in mysql/">事务及MySQL中事务处理方式</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-08-22T00:00:00">
+        <i class="icon-calendar"></i>2013年08月22日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/database.html"><i class="icon-folder-open"></i>database</a>.
+
+
+</footer><!-- /.post-info --></div>
+                <div class="summary"><p>事务(transaction)是作为一个不可分割的逻辑单元而被执行的一组SQL语句</p>
+<p>事务的处理是通过提交(commit)和回滚(rollback)实现的</p>
+<h2>ACID原则</h2>
+<ul>
+<li>
+<p><strong>Atomic原子性</strong>：构成一个事务的所有语句应该是一个独立的逻辑单元，要么全部执行成功，要么一个都不执行</p>
+</li>
+<li>
+<p><strong>Consistent一致性</strong>：在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。</p>
+</li>
+<li>
+<p><strong>Isolated隔离性</strong>：事务不应该互相影响，即隔离状态执行事务，使它们好像是系统在给定时间内执行的唯一操作。如果有两个事务，运行在相同的时间内，执行相同的功能，事务的隔离性将确保每一事务在系统中认为只有该事务在使用系统。这种属性有时称为串行化，为了防止事务操作间的混淆，必须串行化或序列化请求，使得在同一时间仅有一个请求用于同一数据</p>
+</li>
+<li>
+<p><strong>Durable持久性</strong>：如果事务执行成功，它的影响将被永久的记录到数据库中，并不会被回滚。</p>
+</li>
 </ul>
-        </div><!--/span-->
+<p>MySQL中具备事务安全性的存储引擎有InnoDB和Falcon，不具备事务安全性的存储引擎有MyISAM和MEMORY</p>
+<hr />
+<h2>MySQL中事务的使用方式：</h2>
+<ol>
+<li>
+<p>事务开始时发出一条START TRANSACTION语句挂起自动提交模式，执行完构成本次事务的各条语句后，使用COMMIT语句结束事务并永久的计入数据库</p>
+</li>
+<li>
+<p>使用SET autocommit = 0语句手动关闭自动提交功能，COMMIT后再SET autocommit = 1手动开启 </p>
+<div class="highlight"><pre><span class="o">&gt;</span> <span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t ...</span></pre></div></li></ol>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/database/transaction in mysql/">more ...</a>
+                </div>
+        </div>
+        <hr />
+        
+                        </div><!--/span-->
 
                 <div class="span3 well sidebar-nav" id="sidebar">
             <ul class="nav nav-list">
