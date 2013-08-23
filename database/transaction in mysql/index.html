@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>事务及MySQL中事务处理方式</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="masteryoda">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="http://masteryodacn.github.io/theme/css/bootstrap.min.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 13pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-2 {
+        font-size: 8pt;
+      }
+      .tag-4 {
+        font-size: 6pt;
+     }
+    </style>
+    <link href="http://masteryodacn.github.io/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="http://masteryodacn.github.io/theme/css/font-awesome.css" rel="stylesheet">
+
+    <link href="http://masteryodacn.github.io/theme/css/pygments.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="http://masteryodacn.github.io/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="http://masteryodacn.github.io/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://masteryodacn.github.io/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://masteryodacn.github.io/theme/images/apple-touch-icon-114x114.png">
+
+    <link href="http://masteryodacn.github.io/" type="application/atom+xml" rel="alternate" title="masteryoda's blog ATOM Feed" />
+    
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="http://masteryodacn.github.io/index.html">masteryoda's blog </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                                                                    <li class="divider-vertical"></li>
+                                              <li class="active">
+                    <a href="http://masteryodacn.github.io/category/database.html">
+						<i class="icon-folder-open icon-large"></i>database
+					</a>
+                  </li>
+                                <li >
+                    <a href="http://masteryodacn.github.io/category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+              
+                          <ul class="nav pull-right">
+                                <li><a href="http://masteryodacn.github.io/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+
+            </ul>
+            <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="span9" id="content">
+            <section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to 事务及MySQL中事务处理方式">
+                                        事务及MySQL中事务处理方式
+                                </a>
+                                                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+                        <footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-08-22T00:00:00">
+        <i class="icon-calendar"></i>2013年08月22日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/database.html"><i class="icon-folder-open"></i>database</a>.
+
+
+</footer><!-- /.post-info -->                </div>
+                <p>事务(transaction)是作为一个不可分割的逻辑单元而被执行的一组SQL语句</p>
+<p>事务的处理是通过提交(commit)和回滚(rollback)实现的.</p>
+<h2>ACID原则</h2>
+<ul>
+<li>
+<p><strong>Atomic原子性</strong>：构成一个事务的所有语句应该是一个独立的逻辑单元，要么全部执行成功，要么一个都不执行</p>
+</li>
+<li>
+<p><strong>Consistent一致性</strong>：在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。</p>
+</li>
+<li>
+<p><strong>Isolated隔离性</strong>：事务不应该互相影响，即隔离状态执行事务，使它们好像是系统在给定时间内执行的唯一操作。如果有两个事务，运行在相同的时间内，执行相同的功能，事务的隔离性将确保每一事务在系统中认为只有该事务在使用系统。这种属性有时称为串行化，为了防止事务操作间的混淆，必须串行化或序列化请求，使得在同一时间仅有一个请求用于同一数据</p>
+</li>
+<li>
+<p><strong>Durable持久性</strong>：如果事务执行成功，它的影响将被永久的记录到数据库中，并不会被回滚。</p>
+</li>
+</ul>
+<p>MySQL中具备事务安全性的存储引擎有InnoDB和Falcon，不具备事务安全性的存储引擎有MyISAM和MEMORY</p>
+<hr />
+<h2>MySQL中事务的使用方式：</h2>
+<ol>
+<li>
+<p>事务开始时发出一条START TRANSACTION语句挂起自动提交模式，执行完构成本次事务的各条语句后，使用COMMIT语句结束事务并永久的计入数据库</p>
+</li>
+<li>
+<p>使用SET autocommit = 0语句手动关闭自动提交功能，COMMIT后再SET autocommit = 1手动开启 </p>
+<div class="highlight"><pre><span class="o">&gt;</span> <span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;William&quot;</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Wallace&quot;</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">COMMIT</span><span class="p">;</span>
+
+<span class="o">&gt;</span> <span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;William&quot;</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;William&quot;</span><span class="p">;</span>
+<span class="c1">//ERROR</span>
+<span class="o">&gt;</span> <span class="n">ROLLBACK</span><span class="p">;</span>
+
+<span class="o">&gt;</span> <span class="n">SET</span> <span class="n">autocommit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;William&quot;</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Wallace&quot;</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">COMMIT</span><span class="p">;</span>
+<span class="o">&gt;</span> <span class="n">SET</span> <span class="n">autocommit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+
+
+</li>
+</ol>
+<h4>部分回滚</h4>
+<p>需要在事务过程中使用SAVEPOINT语句设置一些保存点(savepoint)，之后回滚时只要在ROLLBACK后加上保存点的名字</p>
+<div class="highlight"><pre>    <span class="o">&gt;</span> <span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+    <span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">VALUES</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="o">&gt;</span> <span class="n">SAVEPOINT</span> <span class="n">my_savepoint</span><span class="p">;</span>
+    <span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">VALUES</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="o">&gt;</span> <span class="n">ROLLBACK</span> <span class="n">TO</span> <span class="n">SAVEPOINT</span> <span class="n">my_savepoint</span><span class="p">;</span>
+    <span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t</span> <span class="n">VALUES</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="o">&gt;</span> <span class="n">COMMIT</span><span class="p">;</span>
+</pre></div>
+
+
+<hr />
+<h2>事务的隔离性</h2>
+<p>MyISAM之类的存储引擎使用了数据表级的锁定机制赖保证不同的客户不能同时修改同一个数据表，但这种做法在数据量比较大的系统上会导致并发性能下降</p>
+<p>InnoDB采用数据行级的锁定机制：在一个用户修改某个数据行的同时，另一个用户可以修改和读取同一张表中的另一个数据行。问题：一个客户的事务在何时才能看到另一个客户的事务作出的修改</p>
+<h3>并发一致性问题</h3>
+<ul>
+<li><strong>脏读(dirty
+   read)</strong>：指某个事务所作出的修改在它尚未被提交时就可以被其他事务看到。其他时候会认为数据行已经修改好了，但那个最初修改数据行的事务还有可能被回滚，这将导致数据库里的数据发送混乱</li>
+<li><strong>不可重复读取(nonrepeatable read)</strong>：指事务T1读取数据后，事务T2执行更新操作，使T1无法再现前一次读取结果。比如有一个事务执行了两次同一个SELECT语句，另一个事务在这条SELECT语句的两次执行之间修改了一些数据，就会发生这种问题</li>
+<li><strong>幻影数据行(phantom row)</strong>：某个事务突然看到了一个它以前没有见过的数据行。事务T1按一定条件从数据库中读取某些数据记录后，事务T2插入了一些记录，当T1再次按相同条件读取数据时，发现多了一些记录</li>
+</ul>
+<h3>MySQL中的解决方案</h3>
+<p>InnoDB提供了4种隔离级别（PS：Falcon不支持READ UNCOMMITTED隔离级别）：</p>
+<ul>
+<li><strong>READ UNCOMMITTED</strong>：允许某个事务看到其他事务尚未提交的数据行改动，三个问题均未避免</li>
+<li><strong>READ COMMITTED</strong>：只允许某个事务看到其他事务已经提交的数据行改动，避免了脏读</li>
+<li><strong>PEPEATABLE READ</strong>：如果某事务两次执行同一个SELECT语句，其结果重复，避免了3个问题</li>
+<li><strong>SERIALIZABLE</strong>：比PEPEATABLE对事务的隔离更彻底：某个事务查看的数据行不允许其他事务修改</li>
+</ul>
+<p>MySQL中使用SET TRANSACTION來改变隔离级别：</p>
+<div class="highlight"><pre>    <span class="o">&gt;</span> <span class="n">SET</span> <span class="n">GLOBAL</span> <span class="n">TRANSACTION</span> <span class="n">ISOLATION</span> <span class="n">LEVEL</span> <span class="n">level</span><span class="p">;</span>
+    <span class="o">&gt;</span> <span class="n">SET</span> <span class="n">SESSION</span> <span class="n">TRANSACTION</span> <span class="n">ISOLATION</span> <span class="n">LEVEL</span> <span class="n">level</span><span class="p">;</span>
+    <span class="o">&gt;</span> <span class="n">SET</span> <span class="n">TRANSACTION</span> <span class="n">TRANSACTION</span> <span class="n">ISOLATION</span> <span class="n">LEVEL</span> <span class="n">level</span><span class="p">;</span>
+</pre></div>
+
+
+<h3>非事务解决方案：</h3>
+<h5>明确的锁定数据表：</h5>
+<p>把多条语句用LOCK TABLE和UNLOCK TABLE语句括起来以把他们当作一个单元來执行，可以防止其他人在锁定有关数据表时修改他们。</p>
+<div class="highlight"><pre>    <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">LOCK</span> <span class="n">TABLE</span> <span class="n">inventory</span> <span class="n">WRITE</span><span class="err">；</span>
+    <span class="mi">2</span> <span class="o">&gt;</span> <span class="n">SELECT</span> <span class="p">...</span> <span class="n">FROM</span> <span class="n">inventory</span> <span class="p">...;</span>
+    <span class="mi">3</span> <span class="o">&gt;</span> <span class="n">UPDATE</span> <span class="n">inventory</span> <span class="n">SET</span> <span class="p">......;</span>
+    <span class="mi">4</span> <span class="o">&gt;</span> <span class="n">UNLOCK</span> <span class="n">TABLES</span><span class="p">;</span>
+</pre></div>
+
+
+<p>当执行 2 的时候如果另一个用户开始执行LOCK TABLE inventory WRITE; 由于已经数据表已经锁定这条语句将被阻塞
+如果只是从某个表中进行读操作，只需加上‘读操作’的锁（读操作锁允许其他客户读，不允许对它进行写操作）LOCK TABLE inventory WRITE, customer READ;</p>
+<h5>使用相对更新操作</h5>
+<div class="highlight"><pre>    <span class="o">&gt;</span> <span class="n">UPDATE</span> <span class="n">inventory</span> <span class="n">SET</span> <span class="n">quantity</span> <span class="o">=</span> <span class="n">quantity</span> <span class="o">-</span> <span class="mi">3</span> <span class="n">WHERE</span> <span class="n">item</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">shirt</span><span class="err">&#39;</span><span class="p">;</span>
+</pre></div>
+                </div><!-- /.entry-content -->
+                                <div class="comments">
+                <h2>Comments !</h2>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                           var disqus_identifier = "database/transaction in mysql/";
+                           (function() {
+                                var dsq = document.createElement('script');
+                                dsq.type = 'text/javascript'; dsq.async = true;
+                                dsq.src = 'http://masteryoda.disqus.com/embed.js';
+                                (document.getElementsByTagName('head')[0] ||
+                                 document.getElementsByTagName('body')[0]).appendChild(dsq);
+                          })();
+                        </script>
+                </div>
+                        </article>
+</section>
+        </div><!--/span-->
+
+                <div class="span3 well sidebar-nav" id="sidebar">
+            <ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
+    <li><a href="http://getpelican.com/"><i class="icon-external-link"></i>Pelican</a></li>
+    <li><a href="http://python.org/"><i class="icon-external-link"></i>Python.org</a></li>
+<li class="nav-header"><h4><i class="icon-home icon-large"></i> social</h4></li>
+<li><a href="http://masteryodacn.github.io/" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
+    <li><a href="http://weibo.com/masteryodacn"><i class="icon-weibo-sign icon-large"></i>weibo</a></li>
+
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+<li>
+<a href="http://masteryodacn.github.io/category/database.html">
+    <i class="icon-folder-open icon-large"></i>database
+</a>
+</li>
+<li>
+<a href="http://masteryodacn.github.io/category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+
+
+</ul>        </div><!--/.well -->
+
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <address id="about">
+                Proudly powered by <a href="http://pelican.notmyidea.org/">Pelican <i class="icon-external-link"></i></a>,
+                                which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>.
+        </address><!-- /#about -->
+
+        <p>The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>,
+                   and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+
+    <script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+	var pageTracker = _gat._getTracker("UA-43330422-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+        <script type="text/javascript">
+    var disqus_shortname = 'masteryoda';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+    <!-- Le javascript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://masteryodacn.github.io/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="http://masteryodacn.github.io/theme/js/bootstrap.min.js"></script>
+  </body>
+</html>
