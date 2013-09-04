@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>masteryoda's blog - database</title>
+    <title>OS启动步骤简述</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -64,12 +64,12 @@
           <div class="nav-collapse">
             <ul class="nav">
                                                                     <li class="divider-vertical"></li>
-                                              <li >
+                                              <li class="active">
                     <a href="/category/os.html">
 						<i class="icon-folder-open icon-large"></i>OS
 					</a>
                   </li>
-                                <li class="active">
+                                <li >
                     <a href="/category/database.html">
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
@@ -94,54 +94,83 @@
     <div class="container-fluid">
       <div class="row">
         <div class="span9" id="content">
-                            <div class="article">
-                <h1><a href="/database/transaction in mysql/">事务及MySQL中事务处理方式</a></h1>
-                <div class="well small"><footer class="post-info">
+            <section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to OS启动步骤简述">
+                                        OS启动步骤简述
+                                </a>
+                                                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+                        <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2013-08-22T00:00:00">
-        <i class="icon-calendar"></i>2013年08月22日
+<abbr class="published" title="2013-09-03T00:00:00">
+        <i class="icon-calendar"></i>2013年09月03日
 </abbr>
 <span class="label">By</span>
 <a href="/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="/category/database.html"><i class="icon-folder-open"></i>database</a>.
+<a href="/category/os.html"><i class="icon-folder-open"></i>OS</a>.
 
 
-</footer><!-- /.post-info --></div>
-                <div class="summary"><p>事务(transaction)是作为一个不可分割的逻辑单元而被执行的一组SQL语句</p>
-<p>事务的处理是通过提交(commit)和回滚(rollback)实现的.</p>
-<h2>ACID原则</h2>
+</footer><!-- /.post-info -->                </div>
+                <blockquote>
+<h3>关于磁盘的一些基础知识</h3>
+<p><strong>机械硬盘盘面可以分为扇区(Sectors)和柱面(Cylinders)两种单位。</strong></p>
 <ul>
-<li>
-<p><strong>Atomic原子性</strong>：构成一个事务的所有语句应该是一个独立的逻辑单元，要么全部执行成功，要么一个都不执行</p>
-</li>
-<li>
-<p><strong>Consistent一致性</strong>：在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。</p>
-</li>
-<li>
-<p><strong>Isolated隔离性</strong>：事务不应该互相影响，即隔离状态执行事务，使它们好像是系统在给定时间内执行的唯一操作。如果有两个事务，运行在相同的时间内，执行相同的功能，事务的隔离性将确保每一事务在系统中认为只有该事务在使用系统。这种属性有时称为串行化，为了防止事务操作间的混淆，必须串行化或序列化请求，使得在同一时间仅有一个请求用于同一数据</p>
-</li>
-<li>
-<p><strong>Durable持久性</strong>：如果事务执行成功，它的影响将被永久的记录到数据库中，并不会被回滚。</p>
-</li>
+<li>磁头数(Heads)表示硬盘总共有几个磁头,也就是有几面盘片, 最大为 255 (用 8 个二进制位存储);</li>
+<li>柱面数(Cylinders) 表示硬盘每一面盘片上有几条磁道,最大为 1023(用 10 个二进制位存储);</li>
+<li>扇区数(Sectors) 表示每一条磁道上有几个扇区, 最大为 63(用 6个二进制位存储).</li>
 </ul>
-<p>MySQL中具备事务安全性的存储引擎有InnoDB和Falcon，不具备事务安全性的存储引擎有MyISAM和MEMORY</p>
+<p><strong>硬盘分区：记录每一分区的起始柱面和终止柱面</strong></p>
+<blockquote>
+<p><strong>主引导分区（MBR）</strong> 磁盘分区的信息都存储在主引导记录（Ｍaster Boot Recorder)中，MBR在一块硬盘的地零柱面上，这也是电脑开机时要利用硬盘，就必须先读取这一区域。在这个区域里记录的硬盘中的所有分区信息，以及开机的时候可以进行开机管理程序写入的地方。<br />
+</p>
+<p><strong>分区表（partition table）</strong> 记录整块硬盘分区状态，有64byte，所以MBR最多仅提供四个partition（分区），这就是所谓Primary(P)与Extended(E)的partition最多只能为四个的原因。而Extended最多只能为一个。(Extended中分区表自建，可再分为多个逻辑分区，Linux下设备文件名从/dev/hda5开始，前四个已经被MBR保留用来分主分区P和扩展分区E了) </p>
+<p><strong>逻辑区块（Block）</strong>是在partition 进行filesystem 的格式化时， 所指定的『最小储存单位』，这个最小储存单位当然是架构在sector 的大小上面( 因为sector 为硬碟的最小物理储存单位啊！ )，所以啦， Block 的大小为sector 的2 的次方倍数。此时，磁头一次可以读取一个block ，如果假设我们在格式化的时候，指定Block 为4 KBytes ( 亦即由连续的八个sector 所构成一个block )。一个block最多只能容纳一个文件，而一个文件可以存储于多个block中。</p>
+</blockquote>
 <hr />
-<h2>MySQL中事务的使用方式：</h2>
+<h3>操作系统启动步骤</h3>
 <ol>
 <li>
-<p>事务开始时发出一条START TRANSACTION语句挂起自动提交模式，执行完构成本次事务的各条语句后，使用COMMIT语句结束事务并永久的计入数据库</p>
+<p><strong>BIOS:</strong>  BIOS是写入到主板上的一个程序，开机的时候系统会主动执行的第一个程序，之后BIOS会去分析计算机里有哪些存储设备，依据用户的设置取取得能够开机的硬盘，并到该硬盘里取读取第一个扇区的MBR位置</p>
 </li>
 <li>
-<p>使用SET autocommit = 0语句手动关闭自动提交功能，COMMIT后再SET autocommit = 1手动开启 </p>
-<div class="highlight"><pre><span class="o">&gt;</span> <span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
-<span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t ...</span></pre></div></li></ol>
-                        <a class="btn primary xsmall" href="/database/transaction in mysql/">more ...</a>
+<p><strong>MBR:</strong> MBR里会放置最基本的引导加载程序，其目的是加载内核文件，它会识别硬盘内的文件系统格式，因此可以读取内核文件</p>
+</li>
+</ol>
+<blockquote>
+<h4>引导加载程序(Boot loader)任务：</h4>
+<ol>
+<li>提供菜单：用户可以选择不同的开机选项</li>
+<li>载入内核文件：直接指向可以开机的程序区段來开始操作系统</li>
+<li>转交其他loader：将引导加载功能转交给其他loader负责</li>
+</ol>
+</blockquote>
+</blockquote>
+                </div><!-- /.entry-content -->
+                                <div class="comments">
+                <h2>Comments !</h2>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                           var disqus_identifier = "OS/description_of_OS_start-up_procedure/";
+                           (function() {
+                                var dsq = document.createElement('script');
+                                dsq.type = 'text/javascript'; dsq.async = true;
+                                dsq.src = 'http://masteryoda.disqus.com/embed.js';
+                                (document.getElementsByTagName('head')[0] ||
+                                 document.getElementsByTagName('body')[0]).appendChild(dsq);
+                          })();
+                        </script>
                 </div>
-        </div>
-        <hr />
-        
-                        </div><!--/span-->
+                        </article>
+</section>
+        </div><!--/span-->
 
                 <div class="span3 well sidebar-nav" id="sidebar">
             <ul class="nav nav-list">

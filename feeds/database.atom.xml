@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>masteryoda's blog</title><link href="/" rel="alternate"></link><link href="/feeds/database.atom.xml" rel="self"></link><id>/</id><updated>2013-08-22T00:00:00+08:00</updated><entry><title>事务及MySQL中事务处理方式</title><link href="/database/transaction%20in%20mysql/" rel="alternate"></link><updated>2013-08-22T00:00:00+08:00</updated><author><name>masteryoda</name></author><id>tag:,2013-08-22:database/transaction in mysql/</id><summary type="html">&lt;p&gt;事务(transaction)是作为一个不可分割的逻辑单元而被执行的一组SQL语句&lt;/p&gt;
+&lt;p&gt;事务的处理是通过提交(commit)和回滚(rollback)实现的.&lt;/p&gt;
+&lt;h2&gt;ACID原则&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Atomic原子性&lt;/strong&gt;：构成一个事务的所有语句应该是一个独立的逻辑单元，要么全部执行成功，要么一个都不执行&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Consistent一致性&lt;/strong&gt;：在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Isolated隔离性&lt;/strong&gt;：事务不应该互相影响，即隔离状态执行事务，使它们好像是系统在给定时间内执行的唯一操作。如果有两个事务，运行在相同的时间内，执行相同的功能，事务的隔离性将确保每一事务在系统中认为只有该事务在使用系统。这种属性有时称为串行化，为了防止事务操作间的混淆，必须串行化或序列化请求，使得在同一时间仅有一个请求用于同一数据&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Durable持久性&lt;/strong&gt;：如果事务执行成功，它的影响将被永久的记录到数据库中，并不会被回滚。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MySQL中具备事务安全性的存储引擎有InnoDB和Falcon，不具备事务安全性的存储引擎有MyISAM和MEMORY&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;MySQL中事务的使用方式：&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;事务开始时发出一条START TRANSACTION语句挂起自动提交模式，执行完构成本次事务的各条语句后，使用COMMIT语句结束事务并永久的计入数据库&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用SET autocommit = 0语句手动关闭自动提交功能，COMMIT后再SET autocommit = 1手动开启 &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;START&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;William&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Wallace&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;START&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;William&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;William&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="c1"&gt;//ERROR&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ROLLBACK&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;autocommit&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;William&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Wallace&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;autocommit&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;部分回滚&lt;/h4&gt;
+&lt;p&gt;需要在事务过程中使用SAVEPOINT语句设置一些保存点(savepoint)，之后回滚时只要在ROLLBACK后加上保存点的名字&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;START&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;VALUES&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SAVEPOINT&lt;/span&gt; &lt;span class="n"&gt;my_savepoint&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;VALUES&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ROLLBACK&lt;/span&gt; &lt;span class="n"&gt;TO&lt;/span&gt; &lt;span class="n"&gt;SAVEPOINT&lt;/span&gt; &lt;span class="n"&gt;my_savepoint&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;INSERT&lt;/span&gt; &lt;span class="n"&gt;INTO&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;VALUES&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr /&gt;
+&lt;h2&gt;事务的隔离性&lt;/h2&gt;
+&lt;p&gt;MyISAM之类的存储引擎使用了数据表级的锁定机制赖保证不同的客户不能同时修改同一个数据表，但这种做法在数据量比较大的系统上会导致并发性能下降&lt;/p&gt;
+&lt;p&gt;InnoDB采用数据行级的锁定机制：在一个用户修改某个数据行的同时，另一个用户可以修改和读取同一张表中的另一个数据行。问题：一个客户的事务在何时才能看到另一个客户的事务作出的修改&lt;/p&gt;
+&lt;h3&gt;并发一致性问题&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;脏读(dirty
+   read)&lt;/strong&gt;：指某个事务所作出的修改在它尚未被提交时就可以被其他事务看到。其他时候会认为数据行已经修改好了，但那个最初修改数据行的事务还有可能被回滚，这将导致数据库里的数据发送混乱&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不可重复读取(nonrepeatable read)&lt;/strong&gt;：指事务T1读取数据后，事务T2执行更新操作，使T1无法再现前一次读取结果。比如有一个事务执行了两次同一个SELECT语句，另一个事务在这条SELECT语句的两次执行之间修改了一些数据，就会发生这种问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;幻影数据行(phantom row)&lt;/strong&gt;：某个事务突然看到了一个它以前没有见过的数据行。事务T1按一定条件从数据库中读取某些数据记录后，事务T2插入了一些记录，当T1再次按相同条件读取数据时，发现多了一些记录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;MySQL中的解决方案&lt;/h3&gt;
+&lt;p&gt;InnoDB提供了4种隔离级别（PS：Falcon不支持READ UNCOMMITTED隔离级别）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;READ UNCOMMITTED&lt;/strong&gt;：允许某个事务看到其他事务尚未提交的数据行改动，三个问题均未避免&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;READ COMMITTED&lt;/strong&gt;：只允许某个事务看到其他事务已经提交的数据行改动，避免了脏读&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;PEPEATABLE READ&lt;/strong&gt;：如果某事务两次执行同一个SELECT语句，其结果重复，避免了3个问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SERIALIZABLE&lt;/strong&gt;：比PEPEATABLE对事务的隔离更彻底：某个事务查看的数据行不允许其他事务修改&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MySQL中使用SET TRANSACTION來改变隔离级别：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;GLOBAL&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt; &lt;span class="n"&gt;ISOLATION&lt;/span&gt; &lt;span class="n"&gt;LEVEL&lt;/span&gt; &lt;span class="n"&gt;level&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;SESSION&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt; &lt;span class="n"&gt;ISOLATION&lt;/span&gt; &lt;span class="n"&gt;LEVEL&lt;/span&gt; &lt;span class="n"&gt;level&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt; &lt;span class="n"&gt;TRANSACTION&lt;/span&gt; &lt;span class="n"&gt;ISOLATION&lt;/span&gt; &lt;span class="n"&gt;LEVEL&lt;/span&gt; &lt;span class="n"&gt;level&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;非事务解决方案：&lt;/h3&gt;
+&lt;h5&gt;明确的锁定数据表：&lt;/h5&gt;
+&lt;p&gt;把多条语句用LOCK TABLE和UNLOCK TABLE语句括起来以把他们当作一个单元來执行，可以防止其他人在锁定有关数据表时修改他们。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;LOCK&lt;/span&gt; &lt;span class="n"&gt;TABLE&lt;/span&gt; &lt;span class="n"&gt;inventory&lt;/span&gt; &lt;span class="n"&gt;WRITE&lt;/span&gt;&lt;span class="err"&gt;；&lt;/span&gt;
+    &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;SELECT&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt; &lt;span class="n"&gt;FROM&lt;/span&gt; &lt;span class="n"&gt;inventory&lt;/span&gt; &lt;span class="p"&gt;...;&lt;/span&gt;
+    &lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;UPDATE&lt;/span&gt; &lt;span class="n"&gt;inventory&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="p"&gt;......;&lt;/span&gt;
+    &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;UNLOCK&lt;/span&gt; &lt;span class="n"&gt;TABLES&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;当执行 2 的时候如果另一个用户开始执行LOCK TABLE inventory WRITE; 由于已经数据表已经锁定这条语句将被阻塞
+如果只是从某个表中进行读操作，只需加上‘读操作’的锁（读操作锁允许其他客户读，不允许对它进行写操作）LOCK TABLE inventory WRITE, customer READ;&lt;/p&gt;
+&lt;h5&gt;使用相对更新操作&lt;/h5&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;UPDATE&lt;/span&gt; &lt;span class="n"&gt;inventory&lt;/span&gt; &lt;span class="n"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;quantity&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;quantity&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="n"&gt;WHERE&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;shirt&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary></entry></feed>

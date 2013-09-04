@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>masteryoda's blog</title><link href="/" rel="alternate"></link><link href="/feeds/os.atom.xml" rel="self"></link><id>/</id><updated>2013-09-03T00:00:00+08:00</updated><entry><title>OS启动步骤简述</title><link href="/OS/description_of_OS_start-up_procedure/" rel="alternate"></link><updated>2013-09-03T00:00:00+08:00</updated><author><name>masteryoda</name></author><id>tag:,2013-09-03:OS/description_of_OS_start-up_procedure/</id><summary type="html">&lt;blockquote&gt;
+&lt;h3&gt;关于磁盘的一些基础知识&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;机械硬盘盘面可以分为扇区(Sectors)和柱面(Cylinders)两种单位。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;磁头数(Heads)表示硬盘总共有几个磁头,也就是有几面盘片, 最大为 255 (用 8 个二进制位存储);&lt;/li&gt;
+&lt;li&gt;柱面数(Cylinders) 表示硬盘每一面盘片上有几条磁道,最大为 1023(用 10 个二进制位存储);&lt;/li&gt;
+&lt;li&gt;扇区数(Sectors) 表示每一条磁道上有几个扇区, 最大为 63(用 6个二进制位存储).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;硬盘分区：记录每一分区的起始柱面和终止柱面&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;主引导分区（MBR）&lt;/strong&gt; 磁盘分区的信息都存储在主引导记录（Ｍaster Boot Recorder)中，MBR在一块硬盘的地零柱面上，这也是电脑开机时要利用硬盘，就必须先读取这一区域。在这个区域里记录的硬盘中的所有分区信息，以及开机的时候可以进行开机管理程序写入的地方。&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;分区表（partition table）&lt;/strong&gt; 记录整块硬盘分区状态，有64byte，所以MBR最多仅提供四个partition（分区），这就是所谓Primary(P)与Extended(E)的partition最多只能为四个的原因。而Extended最多只能为一个。(Extended中分区表自建，可再分为多个逻辑分区，Linux下设备文件名从/dev/hda5开始，前四个已经被MBR保留用来分主分区P和扩展分区E了) &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;逻辑区块（Block）&lt;/strong&gt;是在partition 进行filesystem 的格式化时， 所指定的『最小储存单位』，这个最小储存单位当然是架构在sector 的大小上面( 因为sector 为硬碟的最小物理储存单位啊！ )，所以啦， Block 的大小为sector 的2 的次方倍数。此时，磁头一次可以读取一个block ，如果假设我们在格式化的时候，指定Block 为4 KBytes ( 亦即由连续的八个sector 所构成一个block )。一个block最多只能容纳一个文件，而一个文件可以存储于多个block中。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;h3&gt;操作系统启动步骤&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;BIOS:&lt;/strong&gt;  BIOS是写入到主板上的一个程序，开机的时候系统会主动执行的第一个程序，之后BIOS会去分析计算机里有哪些存储设备，依据用户的设置取取得能够开机的硬盘，并到该硬盘里取读取第一个扇区的MBR位置&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;MBR:&lt;/strong&gt; MBR里会放置最基本的引导加载程序，其目的是加载内核文件，它会识别硬盘内的文件系统格式，因此可以读取内核文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;h4&gt;引导加载程序(Boot loader)任务：&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;提供菜单：用户可以选择不同的开机选项&lt;/li&gt;
+&lt;li&gt;载入内核文件：直接指向可以开机的程序区段來开始操作系统&lt;/li&gt;
+&lt;li&gt;转交其他loader：将引导加载功能转交给其他loader负责&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;</summary></entry></feed>
