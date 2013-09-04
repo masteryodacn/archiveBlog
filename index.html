@@ -8,7 +8,7 @@
     <meta name="author" content="masteryoda">
 
     <!-- Le styles -->
-    <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="http://masteryodacn.github.io/theme/css/bootstrap.min.css" type="text/css" />
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -30,10 +30,10 @@
         font-size: 6pt;
      }
     </style>
-    <link href="/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
-        <link href="/theme/css/font-awesome.css" rel="stylesheet">
+    <link href="http://masteryodacn.github.io/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="http://masteryodacn.github.io/theme/css/font-awesome.css" rel="stylesheet">
 
-    <link href="/theme/css/pygments.css" rel="stylesheet">
+    <link href="http://masteryodacn.github.io/theme/css/pygments.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -41,12 +41,12 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="/theme/images/favicon.ico">
-    <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png">
+    <link rel="shortcut icon" href="http://masteryodacn.github.io/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="http://masteryodacn.github.io/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://masteryodacn.github.io/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://masteryodacn.github.io/theme/images/apple-touch-icon-114x114.png">
 
-    <link href="/" type="application/atom+xml" rel="alternate" title="masteryoda's blog ATOM Feed" />
+    <link href="http://masteryodacn.github.io/" type="application/atom+xml" rel="alternate" title="masteryoda's blog ATOM Feed" />
     
   </head>
 
@@ -60,28 +60,28 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/index.html">masteryoda's blog </a>
+          <a class="brand" href="http://masteryodacn.github.io/index.html">masteryoda's blog </a>
           <div class="nav-collapse">
             <ul class="nav">
                                                                     <li class="divider-vertical"></li>
                                               <li >
-                    <a href="/category/os.html">
+                    <a href="http://masteryodacn.github.io/category/os.html">
 						<i class="icon-folder-open icon-large"></i>OS
 					</a>
                   </li>
                                 <li >
-                    <a href="/category/database.html">
+                    <a href="http://masteryodacn.github.io/category/database.html">
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
                   </li>
                                 <li >
-                    <a href="/category/misc.html">
+                    <a href="http://masteryodacn.github.io/category/misc.html">
 						<i class="icon-folder-open icon-large"></i>misc
 					</a>
                   </li>
               
                           <ul class="nav pull-right">
-                                <li><a href="/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                                <li><a href="http://masteryodacn.github.io/archives.html"><i class="icon-th-list"></i>Archives</a></li>
                           </ul>
 
             </ul>
@@ -95,21 +95,57 @@
       <div class="row">
         <div class="span9" id="content">
                             <div class="article">
-                <h1><a href="/OS/description_of_OS_start-up_procedure/">OS启动步骤简述</a></h1>
+                <h1><a href="http://masteryodacn.github.io/OS/tutorial_linux-file_system/">Linux文件系统</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-09-04T00:00:00">
+        <i class="icon-calendar"></i>2013年09月04日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/os.html"><i class="icon-folder-open"></i>OS</a>.
+
+
+</footer><!-- /.post-info --></div>
+                <div class="summary"><h3>Linux文件权限</h3>
+<p>文件权限以10位字符表示，比如 '-rwxrwx---'</p>
+<p>第一个字符代表这个文件是 “目录[d]/文件[-]/链接文件[l]等 ”。</p>
+<p>之后9个字符分成三组，第一组为文件所有者的权限，第二组为同用户组用户的权限，第三组为其他非本用户组用户的权限。rwx分别代表权限可读/可写/可执行。</p>
+<p>如果文件名以“ . " 开头，说明这是一个隐藏文件</p>
+<blockquote>
+<h4>权限对于文件</h4>
+<ul>
+<li><em>r(read):</em> 可读取此文件的实际内容，如读取文本文件的文字内容等。</li>
+<li><em>w(write):</em> 可编辑，新增或是修改该文件的内容（但不包含删除该文件）。</li>
+<li><em>x(eXecute):</em> 文件是否可以执行。</li>
+</ul>
+<hr />
+<h4>权限对于目录</h4>
+<ul>
+<li><em>r(read contents in directory):</em> 表示具有读取目录结构列表的权限，
+    可以查询该目录下的文件名数据。</li>
+<li><em>w(modify contents of directory):</em> 可写入，
+    表明具有更改该目录结构列表的权限，包括新建新的文件与目录 ...</li></ul></blockquote>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/OS/tutorial_linux-file_system/">more ...</a>
+                </div>
+        </div>
+        <hr />
+                <div class="article">
+                <h1><a href="http://masteryodacn.github.io/OS/description_of_OS_start-up_procedure/">OS启动步骤简述</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2013-09-03T00:00:00">
         <i class="icon-calendar"></i>2013年09月03日
 </abbr>
 <span class="label">By</span>
-<a href="/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="/category/os.html"><i class="icon-folder-open"></i>OS</a>.
+<a href="http://masteryodacn.github.io/category/os.html"><i class="icon-folder-open"></i>OS</a>.
 
 
 </footer><!-- /.post-info --></div>
-                <div class="summary"><blockquote>
-<h3>关于磁盘的一些基础知识</h3>
+                <div class="summary"><h3>关于磁盘的一些基础知识</h3>
 <p><strong>机械硬盘盘面可以分为扇区(Sectors)和柱面(Cylinders)两种单位。</strong></p>
 <ul>
 <li>磁头数(Heads)表示硬盘总共有几个磁头,也就是有几面盘片, 最大为 255 (用 8 个二进制位存储);</li>
@@ -120,22 +156,22 @@
 <blockquote>
 <p><strong>主引导分区（MBR）</strong> 磁盘分区的信息都存储在主引导记录（Ｍaster Boot Recorder)中，MBR在一块硬盘的地零柱面上，这也是电脑开机时要利用硬盘，就必须先读取这一区域。在这个区域里记录的硬盘中的所有分区信息，以及开机的时候可以进行开机管理程序写入的地方。<br />
 </p>
-<p><strong>分区表（partition table）</strong> 记录整块硬盘分区状态，有64byte，所以MBR最多仅提供四个partition ...</p></blockquote></blockquote>
-                        <a class="btn primary xsmall" href="/OS/description_of_OS_start-up_procedure/">more ...</a>
+<p><strong>分区表（partition table）</strong> 记录整块硬盘分区状态，有64byte，所以MBR最多仅提供四个partition ...</p></blockquote>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/OS/description_of_OS_start-up_procedure/">more ...</a>
                 </div>
         </div>
         <hr />
                 <div class="article">
-                <h1><a href="/database/transaction in mysql/">事务及MySQL中事务处理方式</a></h1>
+                <h1><a href="http://masteryodacn.github.io/database/transaction in mysql/">事务及MySQL中事务处理方式</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2013-08-22T00:00:00">
         <i class="icon-calendar"></i>2013年08月22日
 </abbr>
 <span class="label">By</span>
-<a href="/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="/category/database.html"><i class="icon-folder-open"></i>database</a>.
+<a href="http://masteryodacn.github.io/category/database.html"><i class="icon-folder-open"></i>database</a>.
 
 
 </footer><!-- /.post-info --></div>
@@ -167,21 +203,21 @@
 <p>使用SET autocommit = 0语句手动关闭自动提交功能，COMMIT后再SET autocommit = 1手动开启 </p>
 <div class="highlight"><pre><span class="o">&gt;</span> <span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
 <span class="o">&gt;</span> <span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">t ...</span></pre></div></li></ol>
-                        <a class="btn primary xsmall" href="/database/transaction in mysql/">more ...</a>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/database/transaction in mysql/">more ...</a>
                 </div>
         </div>
         <hr />
                 <div class="article">
-                <h1><a href="/misc/my-first-blog/">算是第一篇博客吧</a></h1>
+                <h1><a href="http://masteryodacn.github.io/misc/my-first-blog/">算是第一篇博客吧</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
 <abbr class="published" title="2013-08-17T00:00:00">
         <i class="icon-calendar"></i>2013年08月17日
 </abbr>
 <span class="label">By</span>
-<a href="/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="/category/misc.html"><i class="icon-folder-open"></i>misc</a>.
+<a href="http://masteryodacn.github.io/category/misc.html"><i class="icon-folder-open"></i>misc</a>.
 
 
 </footer><!-- /.post-info --></div>
@@ -191,7 +227,7 @@
 <p>本来也没想着一定要写点儿啥东西的,因为我也不知道写啥...但最近突然脑子一抽筋，想要不搞个玩玩呗～</p>
 <p>一直比较喜欢用evernote,看到好的技术文章总会剪辑到evernote中,虽说的确很方便但有时自己也就不求甚解的只是去看了,是否真正的'懂了'我也不清楚.都说当能用自己话把一件事情说明白的时候,那才是真正的懂了,so 锻炼一下自己吧</p>
 <p>第二个原因是最近读书时改用电脑做笔记,但发现evernote文本格式方面还是不够好(当然别人也不是干这个的),所以决定试着在博客上记一些读书中觉得重点的知识,方便自己今后翻阅吧</p>
-                        <a class="btn primary xsmall" href="/misc/my-first-blog/">more ...</a>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/misc/my-first-blog/">more ...</a>
                 </div>
         </div>
         <hr />
@@ -204,22 +240,22 @@
     <li><a href="http://getpelican.com/"><i class="icon-external-link"></i>Pelican</a></li>
     <li><a href="http://python.org/"><i class="icon-external-link"></i>Python.org</a></li>
 <li class="nav-header"><h4><i class="icon-home icon-large"></i> social</h4></li>
-<li><a href="/" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
+<li><a href="http://masteryodacn.github.io/" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
     <li><a href="http://weibo.com/masteryodacn"><i class="icon-weibo-sign icon-large"></i>weibo</a></li>
 
 <li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
 <li>
-<a href="/category/os.html">
+<a href="http://masteryodacn.github.io/category/os.html">
     <i class="icon-folder-open icon-large"></i>OS
 </a>
 </li>
 <li>
-<a href="/category/database.html">
+<a href="http://masteryodacn.github.io/category/database.html">
     <i class="icon-folder-open icon-large"></i>database
 </a>
 </li>
 <li>
-<a href="/category/misc.html">
+<a href="http://masteryodacn.github.io/category/misc.html">
     <i class="icon-folder-open icon-large"></i>misc
 </a>
 </li>
@@ -267,7 +303,7 @@ pageTracker._trackPageview();
 
     <!-- Le javascript -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/theme/js/jquery-1.7.2.min.js"></script>
-    <script src="/theme/js/bootstrap.min.js"></script>
+    <script src="http://masteryodacn.github.io/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="http://masteryodacn.github.io/theme/js/bootstrap.min.js"></script>
   </body>
 </html>

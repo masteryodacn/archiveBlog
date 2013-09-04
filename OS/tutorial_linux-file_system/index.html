@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>OS启动步骤简述</title>
+    <title>Linux文件系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -100,8 +100,8 @@
                         <h1>
                                 <a href=""
                                         rel="bookmark"
-                                        title="Permalink to OS启动步骤简述">
-                                        OS启动步骤简述
+                                        title="Permalink to Linux文件系统">
+                                        Linux文件系统
                                 </a>
                                                         </h1>
                 </header>
@@ -109,8 +109,8 @@
                 <div class="well">
                         <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2013-09-03T00:00:00">
-        <i class="icon-calendar"></i>2013年09月03日
+<abbr class="published" title="2013-09-04T00:00:00">
+        <i class="icon-calendar"></i>2013年09月04日
 </abbr>
 <span class="label">By</span>
 <a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
@@ -119,49 +119,96 @@
 
 
 </footer><!-- /.post-info -->                </div>
-                <h3>关于磁盘的一些基础知识</h3>
-<p><strong>机械硬盘盘面可以分为扇区(Sectors)和柱面(Cylinders)两种单位。</strong></p>
+                <h3>Linux文件权限</h3>
+<p>文件权限以10位字符表示，比如 '-rwxrwx---'</p>
+<p>第一个字符代表这个文件是 “目录[d]/文件[-]/链接文件[l]等 ”。</p>
+<p>之后9个字符分成三组，第一组为文件所有者的权限，第二组为同用户组用户的权限，第三组为其他非本用户组用户的权限。rwx分别代表权限可读/可写/可执行。</p>
+<p>如果文件名以“ . " 开头，说明这是一个隐藏文件</p>
+<blockquote>
+<h4>权限对于文件</h4>
 <ul>
-<li>磁头数(Heads)表示硬盘总共有几个磁头,也就是有几面盘片, 最大为 255 (用 8 个二进制位存储);</li>
-<li>柱面数(Cylinders) 表示硬盘每一面盘片上有几条磁道,最大为 1023(用 10 个二进制位存储);</li>
-<li>扇区数(Sectors) 表示每一条磁道上有几个扇区, 最大为 63(用 6个二进制位存储).</li>
+<li><em>r(read):</em> 可读取此文件的实际内容，如读取文本文件的文字内容等。</li>
+<li><em>w(write):</em> 可编辑，新增或是修改该文件的内容（但不包含删除该文件）。</li>
+<li><em>x(eXecute):</em> 文件是否可以执行。</li>
 </ul>
-<p><strong>硬盘分区：记录每一分区的起始柱面和终止柱面</strong></p>
-<blockquote>
-<p><strong>主引导分区（MBR）</strong> 磁盘分区的信息都存储在主引导记录（Ｍaster Boot Recorder)中，MBR在一块硬盘的地零柱面上，这也是电脑开机时要利用硬盘，就必须先读取这一区域。在这个区域里记录的硬盘中的所有分区信息，以及开机的时候可以进行开机管理程序写入的地方。<br />
-</p>
-<p><strong>分区表（partition table）</strong> 记录整块硬盘分区状态，有64byte，所以MBR最多仅提供四个partition（分区），这就是所谓Primary(P)与Extended(E)的partition最多只能为四个的原因。而Extended最多只能为一个。(Extended中分区表自建，可再分为多个逻辑分区，Linux下设备文件名从/dev/hda5开始，前四个已经被MBR保留用来分主分区P和扩展分区E了) </p>
-<p><strong>逻辑区块（Block）</strong>是在partition 进行filesystem 的格式化时， 所指定的『最小储存单位』，这个最小储存单位当然是架构在sector 的大小上面( 因为sector 为硬碟的最小物理储存单位啊！ )，所以啦， Block 的大小为sector 的2 的次方倍数。此时，磁头一次可以读取一个block ，如果假设我们在格式化的时候，指定Block 为4 KBytes ( 亦即由连续的八个sector 所构成一个block )。一个block最多只能容纳一个文件，而一个文件可以存储于多个block中。</p>
+<hr />
+<h4>权限对于目录</h4>
+<ul>
+<li><em>r(read contents in directory):</em> 表示具有读取目录结构列表的权限，
+    可以查询该目录下的文件名数据。</li>
+<li><em>w(modify contents of directory):</em> 可写入，
+    表明具有更改该目录结构列表的权限，包括新建新的文件与目录，
+    删除已经存在的文件与目录（不论该文件的权限为何），
+    将已存在的文件或目录进行重命名，
+    转移该目录内的文件或目录的位置。</li>
+<li><em>x(access directory):</em> 表明用户能否进入该目录成为工作目录。</li>
+</ul>
 </blockquote>
 <hr />
-<h3>操作系统启动步骤</h3>
-<ol>
+<h3>改变文件属性与权限</h3>
+<ul>
 <li>
-<p><strong>BIOS:</strong>  BIOS是写入到主板上的一个程序，开机的时候系统会主动执行的第一个程序，之后BIOS会去分析计算机里有哪些存储设备，依据用户的设置取取得能够开机的硬盘，并到该硬盘里取读取第一个扇区的MBR位置</p>
+<p>chgrp: 改变文件所属用户组</p>
+<div class="highlight"><pre><span class="n">chgrp</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">groupname</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+</pre></div>
+
+
 </li>
 <li>
-<p><strong>MBR:</strong> MBR里会放置最基本的引导加载程序，其目的是加载内核文件，它会识别硬盘内的文件系统格式，因此可以读取内核文件</p>
+<p>chown: 改变文件所有者</p>
+<div class="highlight"><pre><span class="n">chown</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">username</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+<span class="n">chown</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">username</span><span class="o">:</span><span class="n">groupname</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+</pre></div>
+
+
 </li>
-</ol>
-<blockquote>
-<h4>引导加载程序(Boot loader)任务：</h4>
-<ol>
-<li>提供菜单：用户可以选择不同的开机选项</li>
-<li>载入内核文件：直接指向可以开机的程序区段來开始操作系统</li>
-<li>转交其他loader：将引导加载功能转交给其他loader负责</li>
-</ol>
-</blockquote>
+<li>
+<p>chmod: 改变文件的权限</p>
+<p>可以分别用数字和符号來更改权限，每个权限用一个bit來保存—— r:4, w:2, x:1。
+rwx权限就为4+2+1=7。</p>
+<div class="highlight"><pre><span class="n">chmod</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">xyz</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+</pre></div>
+
+
+<p>使用符号改变权限时，用u,g,o分别代表user,group,others 3种身份，a代表all。
++, -, =分别代表加入，去除，设置权限。</p>
+<div class="highlight"><pre><span class="n">chmod</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="p">[</span><span class="n">ugoa</span><span class="p">]</span> <span class="p">[</span><span class="o">+</span><span class="mi">1</span><span class="o">=</span><span class="p">]</span> <span class="p">[</span><span class="n">rwx</span><span class="p">]</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+
+<span class="n">chmod</span> <span class="n">u</span><span class="o">=</span><span class="n">rwx</span><span class="p">,</span><span class="n">go</span><span class="o">=</span><span class="n">rx</span> <span class="p">.</span><span class="n">bashrc</span>
+
+<span class="n">chmod</span> <span class="n">a</span><span class="o">+</span><span class="n">w</span> <span class="p">.</span><span class="n">bashrc</span>
+</pre></div>
+
+
+</li>
+</ul>
 <hr />
-<p>Linux默认会提供6个Terminal來让用户登录，切换的快捷方式是Ctrl+Alt+[F1-F6]，Ctrl+Alt+F7是图形界面</p>
-<p>Linux默认提供了7个Run level，其中最常用的是run level 3（纯文本界面）和run level 5（图形界面模式）。可以使用init 命令切换模式。
-run level 0 为关机，run level 6为重启，init 0 与poweroff, shutdown作用一样。</p>
-<hr />
+<h3>Linux目录结构</h3>
+<p>FHS制定出来的四种目录特色为shareable，unshareable，static，variable</p>
+<p>FHS所定义的三层主目录为/，/var，/usr</p>
+<p>有五个目录必须与根目录放置在同一分区，/etc, /bin, /lib, /dev, /sbin</p>
+<ul>
+<li>/bin: 单用户维护模式下还能被操作的命令，/bin下的命令可以被root与一般帐号使用。</li>
+<li>/boot: 开机会用到的文件，包括Linux内核文件以及开机菜单/配置文件等。</li>
+<li>/etc: 系统主要的配置文件都放在此目录下。</li>
+<li>/home: 系统默认的用户主文件夹。</li>
+<li>/lib: 开机时会用到的函数库以及在/bin或/sbin下面的命令会调用的函数库</li>
+<li>/media: 放置可删除的设备，包括软盘光盘DVD</li>
+<li>/mnt: 暂时挂载目录</li>
+<li>/opt: 第三方软件放置于此</li>
+<li>/root: 系统管理员的主文件夹</li>
+<li>/sbin: 放在此目录下的为开机过程中所需要的命令，包括开机修复系统还原等</li>
+<li>/proc: 虚拟文件系统，放置的数据都是内存之中的。</li>
+<li>/sys: 也是一个虚拟文件系统，主要记录内核相关的信息。</li>
+<li>/usr: UNIX Software Resource的缩写，所有系统默认软件的放置目录</li>
+<li>/var: 主要针对常态性变动的文件，包括缓存/登录文件以及某些软件运行时产生的文件。</li>
+</ul>
                 </div><!-- /.entry-content -->
                                 <div class="comments">
                 <h2>Comments !</h2>
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
-                           var disqus_identifier = "OS/description_of_OS_start-up_procedure/";
+                           var disqus_identifier = "OS/tutorial_linux-file_system/";
                            (function() {
                                 var dsq = document.createElement('script');
                                 dsq.type = 'text/javascript'; dsq.async = true;
