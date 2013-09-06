@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>OS启动步骤简述</title>
+    <title>索引及MySQL中的使用</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -64,12 +64,12 @@
           <div class="nav-collapse">
             <ul class="nav">
                                                                     <li class="divider-vertical"></li>
-                                              <li class="active">
+                                              <li >
                     <a href="http://masteryodacn.github.io/category/os.html">
 						<i class="icon-folder-open icon-large"></i>OS
 					</a>
                   </li>
-                                <li >
+                                <li class="active">
                     <a href="http://masteryodacn.github.io/category/database.html">
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
@@ -100,8 +100,8 @@
                         <h1>
                                 <a href=""
                                         rel="bookmark"
-                                        title="Permalink to OS启动步骤简述">
-                                        OS启动步骤简述
+                                        title="Permalink to 索引及MySQL中的使用">
+                                        索引及MySQL中的使用
                                 </a>
                                                         </h1>
                 </header>
@@ -109,59 +109,119 @@
                 <div class="well">
                         <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2013-09-03T00:00:00">
-        <i class="icon-calendar"></i>2013年09月03日
+<abbr class="published" title="2013-09-06T00:00:00">
+        <i class="icon-calendar"></i>2013年09月06日
 </abbr>
 <span class="label">By</span>
 <a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="http://masteryodacn.github.io/category/os.html"><i class="icon-folder-open"></i>OS</a>.
+<a href="http://masteryodacn.github.io/category/database.html"><i class="icon-folder-open"></i>database</a>.
 
 
 </footer><!-- /.post-info -->                </div>
-                <h3>关于磁盘的一些基础知识</h3>
-<p><strong>机械硬盘盘面可以分为扇区(Sectors)和柱面(Cylinders)两种单位。</strong></p>
-<ul>
-<li>磁头数(Heads)表示硬盘总共有几个磁头,也就是有几面盘片, 最大为 255 (用 8 个二进制位存储);</li>
-<li>柱面数(Cylinders) 表示硬盘每一面盘片上有几条磁道,最大为 1023(用 10 个二进制位存储);</li>
-<li>扇区数(Sectors) 表示每一条磁道上有几个扇区, 最大为 63(用 6个二进制位存储).</li>
+                <ul>
+<li>MyISAM数据表的数据行是在数据文件里，而索引值是在索引文件里。一个数据表可以有多个索引，所有的索引都存储在同一个索引文件里。索引文件里每一个索引都是由分类的关键记录数组组成的，这些数组用于快速访问数据文件。</li>
+<li>InnoDB默认使用的是一个表空间，在这个表空间里，它管理着所有InnoDB类型数据表的数据和索引的存储。我们可以通过配置让InnoDB为每个数据表分别创建一个它自己的表空间，但即便如此，一个给定的数据表的数据和索引也是保存在同一个表空间文件里的。</li>
 </ul>
-<p><strong>硬盘分区：记录每一分区的起始柱面和终止柱面</strong></p>
-<blockquote>
-<p><strong>主引导分区（MBR）</strong> 磁盘分区的信息都存储在主引导记录（Ｍaster Boot Recorder)中，MBR在一块硬盘的地零柱面上，这也是电脑开机时要利用硬盘，就必须先读取这一区域。在这个区域里记录的硬盘中的所有分区信息，以及开机的时候可以进行开机管理程序写入的地方。<br />
-</p>
-<p><strong>分区表（partition table）</strong> 记录整块硬盘分区状态，有64byte，所以MBR最多仅提供四个partition（分区），这就是所谓Primary(P)与Extended(E)的partition最多只能为四个的原因。而Extended最多只能为一个。(Extended中分区表自建，可再分为多个逻辑分区，Linux下设备文件名从/dev/hda5开始，前四个已经被MBR保留用来分主分区P和扩展分区E了) </p>
-<p><strong>逻辑区块（Block）</strong>是在partition 进行filesystem 的格式化时， 所指定的『最小储存单位』，这个最小储存单位当然是架构在sector 的大小上面( 因为sector 为硬碟的最小物理储存单位啊！ )，所以啦， Block 的大小为sector 的2 的次方倍数。此时，磁头一次可以读取一个block ，如果假设我们在格式化的时候，指定Block 为4 KBytes ( 亦即由连续的八个sector 所构成一个block )。一个block最多只能容纳一个文件，而一个文件可以存储于多个block中。</p>
-</blockquote>
 <hr />
-<h3>操作系统启动步骤</h3>
-<ol>
-<li>
-<p><strong>BIOS:</strong>  BIOS是写入到主板上的一个程序，开机的时候系统会主动执行的第一个程序，之后BIOS会去分析计算机里有哪些存储设备，依据用户的设置取取得能够开机的硬盘，并到该硬盘里取读取第一个扇区的MBR位置</p>
-</li>
-<li>
-<p><strong>MBR:</strong> MBR里会放置最基本的引导加载程序，其目的是加载内核文件，它会识别硬盘内的文件系统格式，因此可以读取内核文件</p>
-</li>
-</ol>
+<p>使用索引可以提升单表查询速度，同时在连接多表进行查询时也会发挥作用。</p>
 <blockquote>
-<h4>引导加载程序(Boot loader)任务：</h4>
+<div class="highlight"><pre>  <span class="n">SELECT</span> <span class="n">t1</span><span class="p">.</span><span class="n">i1</span><span class="p">,</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span><span class="p">,</span> <span class="n">t3</span><span class="p">.</span><span class="n">i3</span>
+  <span class="n">FROM</span> <span class="n">t1</span> <span class="n">INNER</span> <span class="n">JOIN</span> <span class="n">t2</span> <span class="n">INNER</span> <span class="n">JOIN</span> <span class="n">t3</span>
+  <span class="n">WHERE</span> <span class="n">t1</span><span class="p">.</span><span class="n">i1</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span> <span class="n">AND</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span> <span class="o">=</span> <span class="n">t3</span><span class="p">.</span><span class="n">i3</span><span class="p">;</span>
+</pre></div>
+
+
+<p>以上查询使用索引的处理步骤如下：</p>
 <ol>
-<li>提供菜单：用户可以选择不同的开机选项</li>
-<li>载入内核文件：直接指向可以开机的程序区段來开始操作系统</li>
-<li>转交其他loader：将引导加载功能转交给其他loader负责</li>
+<li>从数据表t1中依次选择一个数据行</li>
+<li>对数据表t2使用索引，直接找出与数据表t1的值相匹配的数据行，类似地直接找到t3中与t1相匹配的数据行</li>
 </ol>
 </blockquote>
 <hr />
-<p>Linux默认会提供6个Terminal來让用户登录，切换的快捷方式是Ctrl+Alt+[F1-F6]，Ctrl+Alt+F7是图形界面</p>
-<p>Linux默认提供了7个Run level，其中最常用的是run level 3（纯文本界面）和run level 5（图形界面模式）。可以使用init 命令切换模式。
-run level 0 为关机，run level 6为重启，init 0 与poweroff, shutdown作用一样。</p>
+<h3>使用索引的优势</h3>
+<ol>
+<li>在查询时把与WHERE子句所给出的条件相匹配的数据行快速找出來</li>
+<li>在连表查询时把与其他数据表里的数据行相匹配的数据行尽快找出來</li>
+<li>对于使用MAX()或MIN()函数的查询，如果数据行带索引，那么其值可以被迅速取出而不用通过遍历数据表查找的方法</li>
+<li>有些索引可以用来迅速完成ORDER BY子句和GROUP BY子句的分类和分组操作</li>
+</ol>
+<h3>使用索引的缺点</h3>
+<ol>
+<li>加快了检索速度缺降低了带索引的数据列里插入/删除以及修改数值的速度</li>
+<li>索引需要占据硬盘空间，多个索引会占据更大空间，这会使你更快的达到数据表的尺寸限制</li>
+</ol>
 <hr />
+<h3>如何选择索引</h3>
+<ol>
+<li>
+<p>尽量为用来搜索/分类或分组的数据列编制索引，不要为作为输出显示的数据列编制索引</p>
+<blockquote>
+<p>最适合有索引的数据列是那些在WHERE 子句中出现的数据列/在连接子句中给出的数据列/在ORDER BY或GROUP BY子句中出现的数据列</p>
+<p>根据SELECT关键字仅出现在输出数据列清单里的数据列最好不要有索引</p>
+</blockquote>
+</li>
+<li>
+<p>综合考虑各数据列的维度</p>
+<blockquote>
+<p>所谓维度是指它所容纳的非重复值的个数。数据列的维度越高，它包含的独一无二的值就越多，重复的值就越少，索引的使用效果就越好。</p>
+</blockquote>
+</li>
+<li>
+<p>对短小的值进行索引</p>
+<blockquote>
+<p>比较短小的值可以在以下几个方面提升索引的处理性能
+- 短小的值可以让比较操作更快的完成，加快索引查询速度
+- 短小的值可以让索引的“体积”更小，减少磁盘IO活动
+- 短小的键值意味着键缓存里的索引块可以容纳更多的键值，让MySQL可以在内存里同时容纳更多的键。</p>
+<p>InnoDB存储引擎使用的是聚集索引，数据行和主键集中保存在一起，其他索引都是些二级索引——他们保存这主键值和二级索引。查找时先在二级索引里找到一个主键值，再通过它找到相应的数据行。主键值在每一个二级索引里都会出现，所以主键尽量短小要更有好处。</p>
+</blockquote>
+</li>
+<li>
+<p>为字符词值的前缀编索引</p>
+</li>
+<li>
+<p>充分利用最左边的前缀</p>
+<blockquote>
+<p>当创建了一个n个数据列的符合索引时，实际上就创建了MySQL呢个能够使用的n个索引。一个复合索引其实就相当与n个索引，因为索引中最左边的数据列集合可以用于匹配数据行。</p>
+<p>比如有一个复合索引，索引中的数据行是以state/city/zip的顺序存储的。该索引可以用来搜索下面的数据列的组合：</p>
+<div class="highlight"><pre>  <span class="n">state</span><span class="p">,</span> <span class="n">city</span><span class="p">,</span> <span class="n">zip</span>
+  <span class="n">state</span><span class="p">,</span> <span class="n">city</span>
+  <span class="n">state</span>
+</pre></div>
+
+
+</blockquote>
+</li>
+<li>
+<p>适可而止，不要建立过多的索引</p>
+</li>
+<li>
+<p>让索引的类型与你打算进行的比较操作的类型保持匹配</p>
+<blockquote>
+<p>在创建索引的时候，绝大多数存储引擎都会选择他们默认的索引实现
+- InnoDB总是使用"B树"索引
+- MyISAM也使用“B树”，但在遇到空间数据类型时会改用“R树”
+- MEMORY存储引擎默认使用HASH索引，但也支持“B树”索引</p>
+<hr />
+<p>对于HASH索引，它在使用“=”或“&lt;=&gt;”操作符进行精确匹配比较操作里的速度很快，但是对于查找一个范围的比较操作里却表现不佳。</p>
+<p>“B树”索引在使用&lt;, &lt;=, =, &gt;=, &gt;, &lt;&gt;, !=和BETWEEN操作符进行的精确比较或范围比较操作里都有很高的效率。如果匹配模式是以一个纯字符串而不是通配符开头的话，“B树”还可以用于使用LIKE操作符进行的模式匹配操作</p>
+<hr />
+<p>可以明确指出创建索引使用的方式，方法是在索引定义里加上<code>USING BTREE</code></p>
+<div class="highlight"><pre>  <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="n">USING</span> <span class="n">BTREE</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</pre></div>
+
+
+<p>可以让同一个MEMORY数据表同时拥有一个HASH索引和一个B树索引，即使它们都基于同一个数据列也没有问题！</p>
+</blockquote>
+</li>
+</ol>
                 </div><!-- /.entry-content -->
                                 <div class="comments">
                 <h2>Comments !</h2>
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
-                           var disqus_identifier = "OS/description_of_OS_start-up_procedure/";
+                           var disqus_identifier = "database/index_in_MySQL/";
                            (function() {
                                 var dsq = document.createElement('script');
                                 dsq.type = 'text/javascript'; dsq.async = true;
