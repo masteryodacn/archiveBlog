@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>MySQL存储程序</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="masteryoda">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="http://masteryodacn.github.io/theme/css/bootstrap.min.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 13pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-2 {
+        font-size: 8pt;
+      }
+      .tag-4 {
+        font-size: 6pt;
+     }
+    </style>
+    <link href="http://masteryodacn.github.io/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="http://masteryodacn.github.io/theme/css/font-awesome.css" rel="stylesheet">
+
+    <link href="http://masteryodacn.github.io/theme/css/pygments.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="http://masteryodacn.github.io/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="http://masteryodacn.github.io/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://masteryodacn.github.io/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://masteryodacn.github.io/theme/images/apple-touch-icon-114x114.png">
+
+    <link href="http://masteryodacn.github.io/" type="application/atom+xml" rel="alternate" title="masteryoda's blog ATOM Feed" />
+    
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="http://masteryodacn.github.io/index.html">masteryoda's blog </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                                                                    <li class="divider-vertical"></li>
+                                              <li >
+                    <a href="http://masteryodacn.github.io/category/os.html">
+						<i class="icon-folder-open icon-large"></i>OS
+					</a>
+                  </li>
+                                <li class="active">
+                    <a href="http://masteryodacn.github.io/category/database.html">
+						<i class="icon-folder-open icon-large"></i>database
+					</a>
+                  </li>
+                                <li >
+                    <a href="http://masteryodacn.github.io/category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+              
+                          <ul class="nav pull-right">
+                                <li><a href="http://masteryodacn.github.io/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+
+            </ul>
+            <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="span9" id="content">
+            <section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to MySQL存储程序">
+                                        MySQL存储程序
+                                </a>
+                                                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+                        <footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-09-06T00:00:00">
+        <i class="icon-calendar"></i>2013年09月06日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/database.html"><i class="icon-folder-open"></i>database</a>.
+
+
+</footer><!-- /.post-info -->                </div>
+                <p>MySQL支持把几种对象存放在服务器端供以后调用，包括：</p>
+<ol>
+<li><strong>存储函数（stored function）</strong>返回一个计算结果，该结果可以用在表达式里</li>
+<li><strong>存储过程（stored procedure）</strong>不直接返回一个结果，但可以用来完成一般的运算或生成一个结果集并传递给客户</li>
+<li><strong>触发器（trigger）</strong>与数据表相关联，当那个数据表被INSERT，DELETE，UPDATE语句修改时，触发器自动执行</li>
+<li><strong>事件（event）</strong>根据时间表在预订时刻自动执行</li>
+</ol>
+<hr />
+<h2>存储函数</h2>
+<p><em>CREATE FUNCTION</em>语句來创建，<em>RETURNS</em> 來指明返回值类型，<em>BEGIN END</em>來表明复合语句的起止，<em>RETURN</em> 语句來返回结果</p>
+<div class="highlight"><pre><span class="n">CREATE</span> <span class="n">FUNCTION</span> <span class="nf">count_born_in_year</span><span class="p">(</span><span class="n">p_year</span> <span class="n">INT</span><span class="p">)</span>
+<span class="n">RETURNS</span> <span class="n">INT</span>
+<span class="n">READS</span> <span class="n">SQL</span> <span class="n">DATA</span>
+<span class="n">BEGIN</span>
+<span class="n">RETURN</span> <span class="p">(</span><span class="n">SELECT</span> <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">president</span> <span class="n">WHERE</span> <span class="n">YEAR</span><span class="p">(</span><span class="n">birth</span><span class="p">)</span><span class="o">=</span><span class="n">p_year</span><span class="p">);</span>
+<span class="n">ENDS</span>
+</pre></div>
+
+
+<p>调用时和调用内建函数一样</p>
+<div class="highlight"><pre><span class="n">count_born_in_year</span><span class="p">(</span><span class="mi">1913</span><span class="p">)</span>
+</pre></div>
+
+
+<h2>存储过程</h2>
+<p>不返回值，因此没有RETURNS和RETURN语句</p>
+<div class="highlight"><pre><span class="n">CREATE</span> <span class="n">PROCEDURE</span> <span class="n">show_born_in_year</span><span class="p">(</span><span class="n">p_year</span> <span class="n">INT</span><span class="p">)</span>
+<span class="n">BEGIN</span>
+    <span class="n">SELECT</span> <span class="n">first_name</span><span class="p">,</span> <span class="n">last_name</span><span class="p">,</span><span class="n">birth</span><span class="p">,</span> <span class="n">death</span>
+     <span class="n">FROM</span> <span class="n">president</span>
+     <span class="n">WHERE</span> <span class="n">YEAR</span><span class="p">(</span><span class="n">birth</span><span class="p">)</span><span class="o">=</span><span class="n">p_year</span><span class="p">;</span>
+<span class="n">END</span>
+</pre></div>
+
+
+<p>无法用在表达式里，只能通过CALL语句來调用</p>
+<div class="highlight"><pre><span class="n">CALL</span> <span class="nf">show_born_in_year</span><span class="p">(</span><span class="mi">1908</span><span class="p">);</span>
+</pre></div>
+
+
+<p>一个过程可以生成<strong>多个结果集</strong>，他们将依次被发送到客户</p>
+<ul>
+<li>
+<p>存储函数有一个限制：不允许对调用本函数的语句正在读或写的数据表进行修改。</p>
+</li>
+<li>
+<p>存储过程通常没有这个限制，但如果他们是从存储函数里被调用，则要遵守这个限制。</p>
+</li>
+</ul>
+<blockquote>
+<p>存储过程的参数分为<code>IN</code>，<code>OUT</code>，<code>INOUT</code>三种</p>
+<ul>
+<li><code>IN</code>是调用者把一个值传递给过程</li>
+<li><code>OUT</code>则相反，过程把一个值附给OUT，这个值在过程返回后可以由调用者使用</li>
+<li><code>INOUT</code>允许调用者向过程传递一个值，然后再取回一个值</li>
+<li>
+<p>默认参数都是<code>IN</code></p>
+<div class="highlight"><pre><span class="n">CRRATE</span> <span class="n">PROCEDURE</span> <span class="n">count_students_by_sex</span> <span class="p">(</span><span class="n">OUT</span> <span class="n">p_male</span> <span class="n">INT</span><span class="p">,</span> <span class="n">OUT</span> <span class="n">p_female</span> <span class="n">INT</span><span class="p">)</span>
+<span class="n">BEGIN</span>
+    <span class="n">SELECT</span> <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">student</span> <span class="n">WHERE</span> <span class="n">sex</span><span class="o">=</span><span class="sc">&#39;M&#39;</span> <span class="n">INTO</span> <span class="n">p_male</span><span class="p">;</span>
+    <span class="n">SELECT</span> <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">student</span> <span class="n">WHERE</span> <span class="n">sex</span><span class="o">=</span><span class="sc">&#39;W&#39;</span> <span class="n">INTO</span> <span class="n">p_female</span><span class="p">;</span>
+<span class="n">END</span>
+<span class="o">---</span>
+<span class="n">CALL</span> <span class="n">count_students_by_sex</span><span class="p">(</span><span class="err">@</span><span class="n">mcount</span><span class="p">,</span> <span class="err">@</span><span class="n">fcount</span><span class="p">);</span>
+<span class="n">SELECT</span> <span class="err">&#39;</span><span class="n">Number</span> <span class="n">of</span> <span class="n">male</span> <span class="n">students</span><span class="o">:</span><span class="err">&#39;</span><span class="p">,</span> <span class="err">@</span><span class="n">mcount</span><span class="p">;</span>
+</pre></div>
+
+
+</li>
+</ul>
+</blockquote>
+<hr />
+<h2>触发器</h2>
+<p>与特定数据表相关联的存储过程，当那个数据表被<code>INSERT</code>，<code>DELETE</code>，<code>UPDATE</code>语句修改时，触发器自动执行，可以被设置为在这集中语句处理每个数据行之前或之后触发。</p>
+<div class="highlight"><pre><span class="n">CREATE</span> <span class="n">TRIGGER</span> <span class="n">trigger_name</span>         <span class="err">#</span> <span class="n">the</span> <span class="n">trigger</span> <span class="n">name</span>
+    <span class="p">{</span><span class="n">BEFORE</span> <span class="o">|</span> <span class="n">AFTER</span><span class="p">}</span>                <span class="err">#</span> <span class="n">when</span> <span class="n">the</span> <span class="n">trigger</span> <span class="n">activates</span>
+    <span class="p">{</span><span class="n">INSERT</span> <span class="o">|</span> <span class="n">UPDATE</span> <span class="o">|</span> <span class="n">DELETE</span><span class="p">}</span>      <span class="err">#</span> <span class="n">what</span> <span class="n">statement</span> <span class="n">activates</span> <span class="n">it</span>
+    <span class="n">ON</span> <span class="n">tbl_name</span>                     <span class="err">#</span> <span class="n">the</span> <span class="n">associated</span> <span class="n">table</span>
+    <span class="n">FOR</span> <span class="n">EACH</span> <span class="n">ROW</span> <span class="n">trigger_stmt</span><span class="p">;</span>      <span class="err">#</span> <span class="n">what</span> <span class="n">the</span> <span class="n">trigger</span> <span class="n">does</span>
+</pre></div>
+
+
+<p>trigger_stmt是触发器的语句体部分，其中可以使用<code>NEW.col_name</code>语法來引用将由<code>INSERT</code>或<code>UPDATE</code>语句插入或修改的新数据行，<code>OLD.col_name</code>可以使用将由<code>DELETE</code>或<code>UPDATE</code>语句删除或修改的老数据行里的数据</p>
+<div class="highlight"><pre><span class="n">CREATE</span> <span class="n">TRIGGER</span> <span class="kt">bi_t</span> <span class="n">BEFORE</span> <span class="n">INSERT</span> <span class="n">ON</span> <span class="kt">table_t</span>
+    <span class="n">FOR</span> <span class="n">EACH</span> <span class="n">ROW</span> <span class="n">BEGIN</span>
+     <span class="n">SET</span> <span class="n">NEW</span><span class="p">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">CURRENT_TIMESTAMP</span><span class="p">;</span>
+     <span class="n">IF</span> <span class="n">NEW</span><span class="p">.</span><span class="n">percent</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="n">THEN</span>
+          <span class="n">SET</span> <span class="n">NEW</span><span class="p">.</span><span class="n">percent</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+     <span class="n">ELSEIF</span> <span class="n">NEW</span><span class="p">.</span><span class="n">percent</span><span class="o">&gt;</span><span class="mi">100</span> <span class="n">THEN</span>
+          <span class="n">SET</span> <span class="n">NEW</span><span class="p">.</span><span class="n">percent</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
+     <span class="n">END</span> <span class="n">IF</span><span class="p">;</span>
+    <span class="n">END</span>
+</pre></div>
+
+
+<hr />
+<h2>事件</h2>
+<p>事件是一个与时间表相关联的存储程序，时间表用来定义事件发生的时间/次数以及何时消失。</p>
+<p>默认情况下事件调度器不会运行，如果想使用事件，必须先启动事件调度器，把以下语句添加到选项文件中</p>
+<div class="highlight"><pre><span class="k">[mysqld]</span>
+<span class="na">event_scheduler</span><span class="o">=</span><span class="s">ON</span>
+</pre></div>
+
+
+<p>如果想在系统运行时停止或启动事件调度器，可以通过改变event_scheduler系统变量的值來达到目的</p>
+<div class="highlight"><pre><span class="n">SET</span> <span class="n">GLOBAL</span> <span class="n">event_scheduler</span> <span class="o">=</span> <span class="n">OFF</span><span class="o">/</span><span class="n">ON</span><span class="p">;</span>    <span class="n">or</span> <span class="mi">0</span><span class="o">/</span><span class="mi">1</span>
+</pre></div>
+
+
+<p>创建事件：</p>
+<div class="highlight"><pre><span class="n">CREATE</span> <span class="n">EVENT</span> <span class="n">expire_web_session</span>
+    <span class="n">ON</span> <span class="n">SCHEDULE</span> <span class="n">EVERY</span> <span class="mi">4</span> <span class="n">HOUR</span>
+    <span class="n">DO</span>
+     <span class="n">DELETE</span> <span class="n">FROM</span> <span class="n">web_session</span>
+     <span class="n">WHERE</span> <span class="n">last_visit</span> <span class="o">&lt;</span> <span class="n">CURRENT_TIMESTAMP</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="mi">1</span> <span class="n">DAY</span><span class="p">;</span>
+</pre></div>
+
+
+<blockquote>
+<p><code>EVERY n interval</code>子句用来给出事件定期执行的时间间隔，其后还可以用<code>STARTS datetime</code> 和<code>ENDS datetime</code>选项给出事件第一次和最后一次执行的时间。</p>
+<p><code>DO</code>语句负责定义事件的语句体部分。</p>
+<p>如果想定义一个只执行一次的事件，可以使用<code>AT</code>调度而不是<code>EVERY</code></p>
+</blockquote>
+<p>禁用事件和启用事件：</p>
+<div class="highlight"><pre><span class="n">ALTER</span> <span class="n">EVENT</span> <span class="n">event_name</span> <span class="n">DISABLE</span><span class="o">/</span><span class="n">ENABLE</span><span class="p">;</span>
+</pre></div>
+                </div><!-- /.entry-content -->
+                                <div class="comments">
+                <h2>Comments !</h2>
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                           var disqus_identifier = "database/stored_in_MySQL/";
+                           (function() {
+                                var dsq = document.createElement('script');
+                                dsq.type = 'text/javascript'; dsq.async = true;
+                                dsq.src = 'http://masteryoda.disqus.com/embed.js';
+                                (document.getElementsByTagName('head')[0] ||
+                                 document.getElementsByTagName('body')[0]).appendChild(dsq);
+                          })();
+                        </script>
+                </div>
+                        </article>
+</section>
+        </div><!--/span-->
+
+                <div class="span3 well sidebar-nav" id="sidebar">
+            <ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
+    <li><a href="http://getpelican.com/"><i class="icon-external-link"></i>Pelican</a></li>
+    <li><a href="http://python.org/"><i class="icon-external-link"></i>Python.org</a></li>
+<li class="nav-header"><h4><i class="icon-home icon-large"></i> social</h4></li>
+<li><a href="http://masteryodacn.github.io/" rel="alternate"><i class="icon-bookmark icon-large"></i>atom feed</a></li>
+    <li><a href="http://weibo.com/masteryodacn"><i class="icon-weibo-sign icon-large"></i>weibo</a></li>
+
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+<li>
+<a href="http://masteryodacn.github.io/category/os.html">
+    <i class="icon-folder-open icon-large"></i>OS
+</a>
+</li>
+<li>
+<a href="http://masteryodacn.github.io/category/database.html">
+    <i class="icon-folder-open icon-large"></i>database
+</a>
+</li>
+<li>
+<a href="http://masteryodacn.github.io/category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+
+
+</ul>        </div><!--/.well -->
+
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <address id="about">
+                Proudly powered by <a href="http://pelican.notmyidea.org/">Pelican <i class="icon-external-link"></i></a>,
+                                which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>.
+        </address><!-- /#about -->
+
+        <p>The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>,
+                   and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+
+    <script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+	var pageTracker = _gat._getTracker("UA-43330422-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+        <script type="text/javascript">
+    var disqus_shortname = 'masteryoda';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+    <!-- Le javascript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://masteryodacn.github.io/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="http://masteryodacn.github.io/theme/js/bootstrap.min.js"></script>
+  </body>
+</html>

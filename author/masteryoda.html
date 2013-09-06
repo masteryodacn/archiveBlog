@@ -149,6 +149,39 @@
         </div>
         <hr />
                 <div class="article">
+                <h1><a href="http://masteryodacn.github.io/database/stored_in_MySQL/">MySQL存储程序</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-09-06T00:00:00">
+        <i class="icon-calendar"></i>2013年09月06日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/database.html"><i class="icon-folder-open"></i>database</a>.
+
+
+</footer><!-- /.post-info --></div>
+                <div class="summary"><p>MySQL支持把几种对象存放在服务器端供以后调用，包括：</p>
+<ol>
+<li><strong>存储函数（stored function）</strong>返回一个计算结果，该结果可以用在表达式里</li>
+<li><strong>存储过程（stored procedure）</strong>不直接返回一个结果，但可以用来完成一般的运算或生成一个结果集并传递给客户</li>
+<li><strong>触发器（trigger）</strong>与数据表相关联，当那个数据表被INSERT，DELETE，UPDATE语句修改时，触发器自动执行</li>
+<li><strong>事件（event）</strong>根据时间表在预订时刻自动执行</li>
+</ol>
+<hr />
+<h2>存储函数</h2>
+<p><em>CREATE FUNCTION</em>语句來创建，<em>RETURNS</em> 來指明返回值类型，<em>BEGIN END</em>來表明复合语句的起止，<em>RETURN</em> 语句來返回结果</p>
+<div class="highlight"><pre><span class="n">CREATE</span> <span class="n">FUNCTION</span> <span class="nf">count_born_in_year</span><span class="p">(</span><span class="n">p_year</span> <span class="n">INT</span><span class="p">)</span>
+<span class="n">RETURNS</span> <span class="n">INT</span>
+<span class="n">READS</span> <span class="n">SQL</span> <span class="n">DATA</span>
+<span class="n">BEGIN</span>
+<span class="n">RETURN</span> <span class="p">(</span><span class="n">SELECT</span> <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">FROM</span> <span class="n">president</span> <span class="n">WHERE ...</span></pre></div>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/database/stored_in_MySQL/">more ...</a>
+                </div>
+        </div>
+        <hr />
+                <div class="article">
                 <h1><a href="http://masteryodacn.github.io/database/transaction in mysql/">事务及MySQL中事务处理方式</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
