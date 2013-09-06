@@ -75,6 +75,11 @@
 					</a>
                   </li>
                                 <li >
+                    <a href="http://masteryodacn.github.io/category/datebase.html">
+						<i class="icon-folder-open icon-large"></i>datebase
+					</a>
+                  </li>
+                                <li >
                     <a href="http://masteryodacn.github.io/category/misc.html">
 						<i class="icon-folder-open icon-large"></i>misc
 					</a>
@@ -95,6 +100,49 @@
       <div class="row">
         <div class="span9" id="content">
                             <div class="article">
+                <h1><a href="http://masteryodacn.github.io/datebase/index_in_MySQL/">索引及MySQL中的使用</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-09-06T00:00:00">
+        <i class="icon-calendar"></i>2013年09月06日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/datebase.html"><i class="icon-folder-open"></i>datebase</a>.
+
+
+</footer><!-- /.post-info --></div>
+                <div class="summary"><ul>
+<li>MyISAM数据表的数据行是在数据文件里，而索引值是在索引文件里。一个数据表可以有多个索引，所有的索引都存储在同一个索引文件里。索引文件里每一个索引都是由分类的关键记录数组组成的，这些数组用于快速访问数据文件。</li>
+<li>InnoDB默认使用的是一个表空间，在这个表空间里，它管理着所有InnoDB类型数据表的数据和索引的存储。我们可以通过配置让InnoDB为每个数据表分别创建一个它自己的表空间，但即便如此，一个给定的数据表的数据和索引也是保存在同一个表空间文件里的。</li>
+</ul>
+<hr />
+<p>使用索引可以提升单表查询速度，同时在连接多表进行查询时也会发挥作用。</p>
+<blockquote>
+<div class="highlight"><pre>  <span class="n">SELECT</span> <span class="n">t1</span><span class="p">.</span><span class="n">i1</span><span class="p">,</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span><span class="p">,</span> <span class="n">t3</span><span class="p">.</span><span class="n">i3</span>
+  <span class="n">FROM</span> <span class="n">t1</span> <span class="n">INNER</span> <span class="n">JOIN</span> <span class="n">t2</span> <span class="n">INNER</span> <span class="n">JOIN</span> <span class="n">t3</span>
+  <span class="n">WHERE</span> <span class="n">t1</span><span class="p">.</span><span class="n">i1</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span> <span class="n">AND</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span> <span class="o">=</span> <span class="n">t3</span><span class="p">.</span><span class="n">i3</span><span class="p">;</span>
+</pre></div>
+
+
+<p>以上查询使用索引的处理步骤如下：</p>
+<ol>
+<li>从数据表t1中依次选择一个数据行</li>
+<li>对数据表t2使用索引，直接找出与数据表t1的值相匹配的数据行，类似地直接找到t3中与t1相匹配的数据行</li>
+</ol>
+</blockquote>
+<hr />
+<h3>使用索引的优势</h3>
+<ol>
+<li>在查询时把与WHERE子句所给出的条件相匹配的数据行快速找出來</li>
+<li>在连表查询时把与其他数据表里的数据行相匹配的数据行尽快找出來</li>
+<li>对于使用MAX()或MIN()函数的查询 ...</li></ol>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/datebase/index_in_MySQL/">more ...</a>
+                </div>
+        </div>
+        <hr />
+                <div class="article">
                 <h1><a href="http://masteryodacn.github.io/database/stored_in_MySQL/">MySQL存储程序</a></h1>
                 <div class="well small"><footer class="post-info">
 <span class="label">Date</span>
@@ -285,6 +333,11 @@
 <li>
 <a href="http://masteryodacn.github.io/category/database.html">
     <i class="icon-folder-open icon-large"></i>database
+</a>
+</li>
+<li>
+<a href="http://masteryodacn.github.io/category/datebase.html">
+    <i class="icon-folder-open icon-large"></i>datebase
 </a>
 </li>
 <li>

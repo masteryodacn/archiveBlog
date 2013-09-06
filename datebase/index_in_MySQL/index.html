@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>算是第一篇博客吧</title>
+    <title>索引及MySQL中的使用</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -74,12 +74,12 @@
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
                   </li>
-                                <li >
+                                <li class="active">
                     <a href="http://masteryodacn.github.io/category/datebase.html">
 						<i class="icon-folder-open icon-large"></i>datebase
 					</a>
                   </li>
-                                <li class="active">
+                                <li >
                     <a href="http://masteryodacn.github.io/category/misc.html">
 						<i class="icon-folder-open icon-large"></i>misc
 					</a>
@@ -105,8 +105,8 @@
                         <h1>
                                 <a href=""
                                         rel="bookmark"
-                                        title="Permalink to 算是第一篇博客吧">
-                                        算是第一篇博客吧
+                                        title="Permalink to 索引及MySQL中的使用">
+                                        索引及MySQL中的使用
                                 </a>
                                                         </h1>
                 </header>
@@ -114,28 +114,119 @@
                 <div class="well">
                         <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2013-08-17T00:00:00">
-        <i class="icon-calendar"></i>2013年08月17日
+<abbr class="published" title="2013-09-06T00:00:00">
+        <i class="icon-calendar"></i>2013年09月06日
 </abbr>
 <span class="label">By</span>
 <a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="http://masteryodacn.github.io/category/misc.html"><i class="icon-folder-open"></i>misc</a>.
+<a href="http://masteryodacn.github.io/category/datebase.html"><i class="icon-folder-open"></i>datebase</a>.
 
 
 </footer><!-- /.post-info -->                </div>
-                <h1>算是第一篇博客吧</h1>
-<p>一直没有写博客的习惯,之前注册了CSDN的,写了几篇后就放那儿不管了.
-想想我貌似从小就没有被培养出记录的习惯,从小到大日记估计就是小学写了一周吧...</p>
-<p>本来也没想着一定要写点儿啥东西的,因为我也不知道写啥...但最近突然脑子一抽筋，想要不搞个玩玩呗～</p>
-<p>一直比较喜欢用evernote,看到好的技术文章总会剪辑到evernote中,虽说的确很方便但有时自己也就不求甚解的只是去看了,是否真正的'懂了'我也不清楚.都说当能用自己话把一件事情说明白的时候,那才是真正的懂了,so 锻炼一下自己吧</p>
-<p>第二个原因是最近读书时改用电脑做笔记,但发现evernote文本格式方面还是不够好(当然别人也不是干这个的),所以决定试着在博客上记一些读书中觉得重点的知识,方便自己今后翻阅吧</p>
+                <ul>
+<li>MyISAM数据表的数据行是在数据文件里，而索引值是在索引文件里。一个数据表可以有多个索引，所有的索引都存储在同一个索引文件里。索引文件里每一个索引都是由分类的关键记录数组组成的，这些数组用于快速访问数据文件。</li>
+<li>InnoDB默认使用的是一个表空间，在这个表空间里，它管理着所有InnoDB类型数据表的数据和索引的存储。我们可以通过配置让InnoDB为每个数据表分别创建一个它自己的表空间，但即便如此，一个给定的数据表的数据和索引也是保存在同一个表空间文件里的。</li>
+</ul>
+<hr />
+<p>使用索引可以提升单表查询速度，同时在连接多表进行查询时也会发挥作用。</p>
+<blockquote>
+<div class="highlight"><pre>  <span class="n">SELECT</span> <span class="n">t1</span><span class="p">.</span><span class="n">i1</span><span class="p">,</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span><span class="p">,</span> <span class="n">t3</span><span class="p">.</span><span class="n">i3</span>
+  <span class="n">FROM</span> <span class="n">t1</span> <span class="n">INNER</span> <span class="n">JOIN</span> <span class="n">t2</span> <span class="n">INNER</span> <span class="n">JOIN</span> <span class="n">t3</span>
+  <span class="n">WHERE</span> <span class="n">t1</span><span class="p">.</span><span class="n">i1</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span> <span class="n">AND</span> <span class="n">t2</span><span class="p">.</span><span class="n">i2</span> <span class="o">=</span> <span class="n">t3</span><span class="p">.</span><span class="n">i3</span><span class="p">;</span>
+</pre></div>
+
+
+<p>以上查询使用索引的处理步骤如下：</p>
+<ol>
+<li>从数据表t1中依次选择一个数据行</li>
+<li>对数据表t2使用索引，直接找出与数据表t1的值相匹配的数据行，类似地直接找到t3中与t1相匹配的数据行</li>
+</ol>
+</blockquote>
+<hr />
+<h3>使用索引的优势</h3>
+<ol>
+<li>在查询时把与WHERE子句所给出的条件相匹配的数据行快速找出來</li>
+<li>在连表查询时把与其他数据表里的数据行相匹配的数据行尽快找出來</li>
+<li>对于使用MAX()或MIN()函数的查询，如果数据行带索引，那么其值可以被迅速取出而不用通过遍历数据表查找的方法</li>
+<li>有些索引可以用来迅速完成ORDER BY子句和GROUP BY子句的分类和分组操作</li>
+</ol>
+<h3>使用索引的缺点</h3>
+<ol>
+<li>加快了检索速度缺降低了带索引的数据列里插入/删除以及修改数值的速度</li>
+<li>索引需要占据硬盘空间，多个索引会占据更大空间，这会使你更快的达到数据表的尺寸限制</li>
+</ol>
+<hr />
+<h3>如何选择索引</h3>
+<ol>
+<li>
+<p>尽量为用来搜索/分类或分组的数据列编制索引，不要为作为输出显示的数据列编制索引</p>
+<blockquote>
+<p>最适合有索引的数据列是那些在WHERE 子句中出现的数据列/在连接子句中给出的数据列/在ORDER BY或GROUP BY子句中出现的数据列</p>
+<p>根据SELECT关键字仅出现在输出数据列清单里的数据列最好不要有索引</p>
+</blockquote>
+</li>
+<li>
+<p>综合考虑各数据列的维度</p>
+<blockquote>
+<p>所谓维度是指它所容纳的非重复值的个数。数据列的维度越高，它包含的独一无二的值就越多，重复的值就越少，索引的使用效果就越好。</p>
+</blockquote>
+</li>
+<li>
+<p>对短小的值进行索引</p>
+<blockquote>
+<p>比较短小的值可以在以下几个方面提升索引的处理性能
+- 短小的值可以让比较操作更快的完成，加快索引查询速度
+- 短小的值可以让索引的“体积”更小，减少磁盘IO活动
+- 短小的键值意味着键缓存里的索引块可以容纳更多的键值，让MySQL可以在内存里同时容纳更多的键。</p>
+<p>InnoDB存储引擎使用的是聚集索引，数据行和主键集中保存在一起，其他索引都是些二级索引——他们保存这主键值和二级索引。查找时先在二级索引里找到一个主键值，再通过它找到相应的数据行。主键值在每一个二级索引里都会出现，所以主键尽量短小要更有好处。</p>
+</blockquote>
+</li>
+<li>
+<p>为字符词值的前缀编索引</p>
+</li>
+<li>
+<p>充分利用最左边的前缀</p>
+<blockquote>
+<p>当创建了一个n个数据列的符合索引时，实际上就创建了MySQL呢个能够使用的n个索引。一个复合索引其实就相当与n个索引，因为索引中最左边的数据列集合可以用于匹配数据行。</p>
+<p>比如有一个复合索引，索引中的数据行是以state/city/zip的顺序存储的。该索引可以用来搜索下面的数据列的组合：</p>
+<div class="highlight"><pre>  <span class="n">state</span><span class="p">,</span> <span class="n">city</span><span class="p">,</span> <span class="n">zip</span>
+  <span class="n">state</span><span class="p">,</span> <span class="n">city</span>
+  <span class="n">state</span>
+</pre></div>
+
+
+</blockquote>
+</li>
+<li>
+<p>适可而止，不要建立过多的索引</p>
+</li>
+<li>
+<p>让索引的类型与你打算进行的比较操作的类型保持匹配</p>
+<blockquote>
+<p>在创建索引的时候，绝大多数存储引擎都会选择他们默认的索引实现
+- InnoDB总是使用"B树"索引
+- MyISAM也使用“B树”，但在遇到空间数据类型时会改用“R树”
+- MEMORY存储引擎默认使用HASH索引，但也支持“B树”索引</p>
+<hr />
+<p>对于HASH索引，它在使用“=”或“&lt;=&gt;”操作符进行精确匹配比较操作里的速度很快，但是对于查找一个范围的比较操作里却表现不佳。</p>
+<p>“B树”索引在使用&lt;, &lt;=, =, &gt;=, &gt;, &lt;&gt;, !=和BETWEEN操作符进行的精确比较或范围比较操作里都有很高的效率。如果匹配模式是以一个纯字符串而不是通配符开头的话，“B树”还可以用于使用LIKE操作符进行的模式匹配操作</p>
+<hr />
+<p>可以明确指出创建索引使用的方式，方法是在索引定义里加上<code>USING BTREE</code></p>
+<div class="highlight"><pre>  <span class="n">PRIMARY</span> <span class="n">KEY</span> <span class="n">USING</span> <span class="n">BTREE</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</pre></div>
+
+
+<p>可以让同一个MEMORY数据表同时拥有一个HASH索引和一个B树索引，即使它们都基于同一个数据列也没有问题！</p>
+</blockquote>
+</li>
+</ol>
                 </div><!-- /.entry-content -->
                                 <div class="comments">
                 <h2>Comments !</h2>
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
-                           var disqus_identifier = "misc/my-first-blog/";
+                           var disqus_identifier = "datebase/index_in_MySQL/";
                            (function() {
                                 var dsq = document.createElement('script');
                                 dsq.type = 'text/javascript'; dsq.async = true;
