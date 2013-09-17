@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Linux文件系统</title>
+    <title>将Sublime Text2添加到ubuntu快捷启动栏</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -64,7 +64,7 @@
           <div class="nav-collapse">
             <ul class="nav">
                                                                     <li class="divider-vertical"></li>
-                                              <li class="active">
+                                              <li >
                     <a href="http://masteryodacn.github.io/category/os.html">
 						<i class="icon-folder-open icon-large"></i>OS
 					</a>
@@ -74,7 +74,7 @@
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
                   </li>
-                                <li >
+                                <li class="active">
                     <a href="http://masteryodacn.github.io/category/linux.html">
 						<i class="icon-folder-open icon-large"></i>linux
 					</a>
@@ -105,8 +105,8 @@
                         <h1>
                                 <a href=""
                                         rel="bookmark"
-                                        title="Permalink to Linux文件系统">
-                                        Linux文件系统
+                                        title="Permalink to 将Sublime Text2添加到ubuntu快捷启动栏">
+                                        将Sublime Text2添加到ubuntu快捷启动栏
                                 </a>
                                                         </h1>
                 </header>
@@ -114,106 +114,56 @@
                 <div class="well">
                         <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2013-09-04T00:00:00">
-        <i class="icon-calendar"></i>2013年09月04日
+<abbr class="published" title="2013-09-16T00:00:00">
+        <i class="icon-calendar"></i>2013年09月16日
 </abbr>
 <span class="label">By</span>
 <a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
 <span class="label">Category</span>
-<a href="http://masteryodacn.github.io/category/os.html"><i class="icon-folder-open"></i>OS</a>.
+<a href="http://masteryodacn.github.io/category/linux.html"><i class="icon-folder-open"></i>linux</a>.
 
 
 </footer><!-- /.post-info -->                </div>
-                <h3>Linux文件权限</h3>
-<p>文件权限以10位字符表示，比如 '-rwxrwx---'</p>
-<p>第一个字符代表这个文件是 “目录[d]/文件[-]/链接文件[l]等 ”。</p>
-<p>之后9个字符分成三组，第一组为文件所有者的权限，第二组为同用户组用户的权限，第三组为其他非本用户组用户的权限。rwx分别代表权限可读/可写/可执行。</p>
-<p>如果文件名以“ . " 开头，说明这是一个隐藏文件</p>
-<blockquote>
-<h4>权限对于文件</h4>
-<ul>
-<li><em>r(read):</em> 可读取此文件的实际内容，如读取文本文件的文字内容等。</li>
-<li><em>w(write):</em> 可编辑，新增或是修改该文件的内容（但不包含删除该文件）。</li>
-<li><em>x(eXecute):</em> 文件是否可以执行。</li>
-</ul>
-<hr />
-<h4>权限对于目录</h4>
-<ul>
-<li><em>r(read contents in directory):</em> 表示具有读取目录结构列表的权限，
-    可以查询该目录下的文件名数据。</li>
-<li><em>w(modify contents of directory):</em> 可写入，
-    表明具有更改该目录结构列表的权限，包括新建新的文件与目录，
-    删除已经存在的文件与目录（不论该文件的权限为何），
-    将已存在的文件或目录进行重命名，
-    转移该目录内的文件或目录的位置。</li>
-<li><em>x(access directory):</em> 表明用户能否进入该目录成为工作目录。</li>
-</ul>
-</blockquote>
-<hr />
-<h3>改变文件属性与权限</h3>
-<ul>
-<li>
-<p>chgrp: 改变文件所属用户组</p>
-<div class="highlight"><pre><span class="n">chgrp</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">groupname</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+                <p>Sublime Text2的安装就不说了，直入正题：如何为sublimeText2创建快速启动。</p>
+<p>因为Sublime Text并不是需要安装，所以缺少Ubuntu桌面运行的一些基本配置，比如不能将它加入桌面侧边的启动器。而通过软件中心安装的软件就有图标，并能加入到启动器上，这是因为它们有一个desktop配置文件的缘故。这些配置文件在<code>/usr/share/applications</code>这个文件夹下面，So，我们可以自己写一个desktop然后把它放到<code>/usr/share/applications</code>文件夹下來‘创造’一个启动程序。</p>
+<p><strong>sublime.desktop文件：</strong></p>
+<p>注意，将Exec和Icon替换成自己的sublime安装目录</p>
+<div class="highlight"><pre><span class="k">[Desktop Entry]</span>
+<span class="na">Name</span><span class="o">=</span><span class="s">SublimeText 2</span>
+<span class="na">GenericName</span><span class="o">=</span><span class="s">Text Editor</span>
+<span class="na">Exec</span><span class="o">=</span><span class="s">/opt/sublimeText2/sublime_text</span>
+
+<span class="na">Terminal</span><span class="o">=</span><span class="s">false</span>
+<span class="na">Icon</span><span class="o">=</span><span class="s">/opt/sublimeText2/Icon/48x48/sublime_text.png</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">Application</span>
+<span class="na">Categories</span><span class="o">=</span><span class="s">TextEditor;IDE;Development</span>
+<span class="na">X-Ayatana-Desktop-Shortcuts</span><span class="o">=</span><span class="s">NewWindow</span>
+
+<span class="k">[NewWindow Shortcut Group]</span>
+<span class="na">Name</span><span class="o">=</span><span class="s">New Window</span>
+<span class="na">Exec</span><span class="o">=</span><span class="s">sublime -n</span>
+<span class="na">TargetEnvironment</span><span class="o">=</span><span class="s">Unity</span>
 </pre></div>
 
 
-</li>
-<li>
-<p>chown: 改变文件所有者</p>
-<div class="highlight"><pre><span class="n">chown</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">username</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
-<span class="n">chown</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">username</span><span class="o">:</span><span class="n">groupname</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+<p>之后将sublime.desktop文件复制到<code>/usr/share/applications</code>文件夹下:</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">cp</span> <span class="n">sublime</span><span class="p">.</span><span class="n">desktop</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">applications</span>
 </pre></div>
 
 
-</li>
-<li>
-<p>chmod: 改变文件的权限</p>
-<p>可以分别用数字和符号來更改权限，每个权限用一个bit來保存—— r:4, w:2, x:1。
-rwx权限就为4+2+1=7。</p>
-<div class="highlight"><pre><span class="n">chmod</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="n">xyz</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
+<p>更改文件权限为可执行文件：</p>
+<div class="highlight"><pre><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">applications</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">444</span> <span class="n">sublime</span><span class="p">.</span><span class="n">desktop</span>
 </pre></div>
 
 
-<p>使用符号改变权限时，用u,g,o分别代表user,group,others 3种身份，a代表all。
-+, -, =分别代表加入，去除，设置权限。</p>
-<div class="highlight"><pre><span class="n">chmod</span> <span class="p">[</span><span class="o">-</span><span class="n">R</span><span class="p">]</span> <span class="p">[</span><span class="n">ugoa</span><span class="p">]</span> <span class="p">[</span><span class="o">+</span><span class="mi">1</span><span class="o">=</span><span class="p">]</span> <span class="p">[</span><span class="n">rwx</span><span class="p">]</span> <span class="n">dirname</span><span class="o">/</span><span class="n">filename</span> <span class="p">...</span>
-
-<span class="n">chmod</span> <span class="n">u</span><span class="o">=</span><span class="n">rwx</span><span class="p">,</span><span class="n">go</span><span class="o">=</span><span class="n">rx</span> <span class="p">.</span><span class="n">bashrc</span>
-
-<span class="n">chmod</span> <span class="n">a</span><span class="o">+</span><span class="n">w</span> <span class="p">.</span><span class="n">bashrc</span>
-</pre></div>
-
-
-</li>
-</ul>
-<hr />
-<h3>Linux目录结构</h3>
-<p>FHS制定出来的四种目录特色为shareable，unshareable，static，variable</p>
-<p>FHS所定义的三层主目录为/，/var，/usr</p>
-<p>有五个目录必须与根目录放置在同一分区，/etc, /bin, /lib, /dev, /sbin</p>
-<ul>
-<li>/bin: 单用户维护模式下还能被操作的命令，/bin下的命令可以被root与一般帐号使用。</li>
-<li>/boot: 开机会用到的文件，包括Linux内核文件以及开机菜单/配置文件等。</li>
-<li>/etc: 系统主要的配置文件都放在此目录下。</li>
-<li>/home: 系统默认的用户主文件夹。</li>
-<li>/lib: 开机时会用到的函数库以及在/bin或/sbin下面的命令会调用的函数库</li>
-<li>/media: 放置可删除的设备，包括软盘光盘DVD</li>
-<li>/mnt: 暂时挂载目录</li>
-<li>/opt: 第三方软件放置于此</li>
-<li>/root: 系统管理员的主文件夹</li>
-<li>/sbin: 放在此目录下的为开机过程中所需要的命令，包括开机修复系统还原等</li>
-<li>/proc: 虚拟文件系统，放置的数据都是内存之中的。</li>
-<li>/sys: 也是一个虚拟文件系统，主要记录内核相关的信息。</li>
-<li>/usr: UNIX Software Resource的缩写，所有系统默认软件的放置目录</li>
-<li>/var: 主要针对常态性变动的文件，包括缓存/登录文件以及某些软件运行时产生的文件。</li>
-</ul>
+<p>之后在Dash Home中的applications里就能看到SublimeText 2了。</p>
                 </div><!-- /.entry-content -->
                                 <div class="comments">
                 <h2>Comments !</h2>
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
-                           var disqus_identifier = "OS/tutorial_linux-file_system/";
+                           var disqus_identifier = "linux/Sublime quick start in ubuntu/";
                            (function() {
                                 var dsq = document.createElement('script');
                                 dsq.type = 'text/javascript'; dsq.async = true;

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>masteryoda's blog</title>
+    <title>masteryoda's blog - linux</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="masteryoda">
@@ -74,7 +74,7 @@
 						<i class="icon-folder-open icon-large"></i>database
 					</a>
                   </li>
-                                <li >
+                                <li class="active">
                     <a href="http://masteryodacn.github.io/category/linux.html">
 						<i class="icon-folder-open icon-large"></i>linux
 					</a>
@@ -99,27 +99,38 @@
     <div class="container-fluid">
       <div class="row">
         <div class="span9" id="content">
-            <section id="content">
-<h1>Archives for masteryoda's blog</h1>
+                            <div class="article">
+                <h1><a href="http://masteryodacn.github.io/linux/Sublime quick start in ubuntu/">将Sublime Text2添加到ubuntu快捷启动栏</a></h1>
+                <div class="well small"><footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2013-09-16T00:00:00">
+        <i class="icon-calendar"></i>2013年09月16日
+</abbr>
+<span class="label">By</span>
+<a href="http://masteryodacn.github.io/author/masteryoda.html"><i class="icon-user"></i>masteryoda</a>
+<span class="label">Category</span>
+<a href="http://masteryodacn.github.io/category/linux.html"><i class="icon-folder-open"></i>linux</a>.
 
-<dl>
-	<dt>2013年09月16日</dt>
-	<dd><a href='linux/Sublime quick start in ubuntu/'>将Sublime Text2添加到ubuntu快捷启动栏</a></dd>
-	<dt>2013年09月06日</dt>
-	<dd><a href='database/index_in_MySQL/'>索引及MySQL中的使用</a></dd>
-	<dt>2013年09月06日</dt>
-	<dd><a href='database/stored_in_MySQL/'>MySQL存储程序</a></dd>
-	<dt>2013年09月04日</dt>
-	<dd><a href='OS/tutorial_linux-file_system/'>Linux文件系统</a></dd>
-	<dt>2013年09月03日</dt>
-	<dd><a href='OS/description_of_OS_start-up_procedure/'>OS启动步骤简述</a></dd>
-	<dt>2013年08月22日</dt>
-	<dd><a href='database/transaction in mysql/'>事务及MySQL中事务处理方式</a></dd>
-	<dt>2013年08月17日</dt>
-	<dd><a href='misc/my-first-blog/'>算是第一篇博客吧</a></dd>
-</dl>
-</section>
-        </div><!--/span-->
+
+</footer><!-- /.post-info --></div>
+                <div class="summary"><p>Sublime Text2的安装就不说了，直入正题：如何为sublimeText2创建快速启动。</p>
+<p>因为Sublime Text并不是需要安装，所以缺少Ubuntu桌面运行的一些基本配置，比如不能将它加入桌面侧边的启动器。而通过软件中心安装的软件就有图标，并能加入到启动器上，这是因为它们有一个desktop配置文件的缘故。这些配置文件在<code>/usr/share/applications</code>这个文件夹下面，So，我们可以自己写一个desktop然后把它放到<code>/usr/share/applications</code>文件夹下來‘创造’一个启动程序。</p>
+<p><strong>sublime.desktop文件：</strong></p>
+<p>注意，将Exec和Icon替换成自己的sublime安装目录</p>
+<div class="highlight"><pre><span class="k">[Desktop Entry]</span>
+<span class="na">Name</span><span class="o">=</span><span class="s">SublimeText 2</span>
+<span class="na">GenericName</span><span class="o">=</span><span class="s">Text Editor</span>
+<span class="na">Exec</span><span class="o">=</span><span class="s">/opt/sublimeText2/sublime_text</span>
+
+<span class="na">Terminal</span><span class="o">=</span><span class="s">false</span>
+<span class="na">Icon</span><span class="o">=</span><span class="s">/opt/sublimeText2/Icon/48x48/sublime_text.png</span>
+<span class="na">Type ...</span></pre></div>
+                        <a class="btn primary xsmall" href="http://masteryodacn.github.io/linux/Sublime quick start in ubuntu/">more ...</a>
+                </div>
+        </div>
+        <hr />
+        
+                        </div><!--/span-->
 
                 <div class="span3 well sidebar-nav" id="sidebar">
             <ul class="nav nav-list">
