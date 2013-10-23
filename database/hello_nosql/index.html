@@ -1,0 +1,119 @@
+<p>Title: 初探NoSQL
+Date: 2013-10-23
+Category: Database
+Tag: NoSQL, MongoDB
+Slug: hello_nosql</p>
+
+<p>首先分享个mongoDB的资料汇总链接<a href="http://blog.nosqlfan.com/html/3548.html">http://blog.nosqlfan.com/html/3548.html</a></p><h2 class="wmd-title" id="mongodb安装配置">MongoDB安装&amp;配置</h2>
+
+<ol>
+<li><a href="http://www.mongodb.org">http://www.mongodb.org</a> 上下载MongoDB</li>
+<li>解压到某个路径下，如/opt</li>
+<li><p>MongoDB数据库默认存放在/data/db目录下，如果想用默认目录，需创建目录并设置好权限：</p>
+
+<pre><code>$ sudo mkdir -p /data/db
+
+$ sudo chown 'userName' /data/db
+</code></pre>
+
+<p>自定义目录的话，需要把新目录作为–dbpath的参数传给MongoDB:</p>
+
+<pre><code>$ sudo mkdir -p /opt/data/db
+
+$ sudo chown 'userName' opt/data/db   
+
+$ bin/mongod --dbpath /opt/data/db
+</code></pre></li>
+<li><p>默认使用27017端口监听可以使用port选项指定不同端口号：</p>
+
+<pre><code>$ bin/mongod --port 94301
+</code></pre></li>
+</ol><h2 class="wmd-title" id="启动mongodb和存储数据">启动MongoDB和存储数据</h2>
+
+<p>启动MongoDB数据库：</p>
+
+<pre><code>bin/mongod [--dbpath]
+//正确的话输出以下信息
+Sat Aug 31 05:11:36.216 [websvr] admin web console waiting for connections on port 28017
+Sat Aug 31 05:11:36.227 [initandlisten] waiting for connections on port 27017
+</code></pre>
+
+<p>使用mongo JavaScript shell连接数据库：</p>
+
+<pre><code>bin/mongo
+
+hadoop@master:/opt/mongodb$ bin/mongo
+MongoDB shell version: 2.4.7
+connecting to: test
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see
+    http://docs.mongodb.org/
+Questions? Try the support group
+    http://groups.google.com/group/mongodb-user
+Server has startup warnings: 
+Sat Aug 31 05:11:36.026 [initandlisten] 
+Sat Aug 31 05:11:36.026 [initandlisten] ** NOTE: This is a 32 bit MongoDB binary.
+Sat Aug 31 05:11:36.026 [initandlisten] **       32 bit builds are limited to less than      2GB of data (or less with --journal).
+Sat Aug 31 05:11:36.026 [initandlisten] **       Note that journaling defaults to off for     32 bit and is currently off.
+Sat Aug 31 05:11:36.026 [initandlisten] **       See http://dochub.mongodb.org/core/32bit
+Sat Aug 31 05:11:36.027 [initandlisten] 
+&gt; 
+</code></pre>
+
+<p>默认连接本地的test数据库</p>
+
+<p>使用help可以查看可用命令</p>
+
+<h2 class="wmd-title" id="基本操作">基本操作</h2>
+
+<h3 class="wmd-title" id="创建数据库插入数据">1.创建数据库，插入数据</h3>
+
+<p>首先创建prefs数据库，然后是库中名为location的集合，最后在该集合中按用户名加邮政编码的元祖结构存储数据。</p>
+
+<pre><code>use prefs
+w = {name: "John", zip: 10001};
+x = {name: "Lee", zip: 94456};
+y = {name: "Jenny", zip: 33101};
+z = {name: "Srinivas", zip: 02101};
+db.location.save(w);
+db.location.save(x);
+db.location.save(y);
+db.location.save(z);
+</code></pre>
+
+<p><code>use prefs</code>命令将当前数据库改变为prefs，但是数据库本身并没有显示创建过，同样location集合也没有显示创建过。MongoDB中，数据库和集合都是在插入数据时才创建（本例中第五行）。</p>
+
+<h3 class="wmd-title" id="查找数据">2.查找数据</h3>
+
+<p>执行<code>db.location.find()</code>来获得集合location中所有数据，
+使用<code>db.location.find({zip: 10001})</code>来获得集合location中所有zip为10001的用户列表：</p>
+
+<pre><code>&gt; db.location.find()
+{ "_id" : ObjectId("52210e1d0db96bf1b80f9eeb"), "name" : "John", "zip" : 10001 }
+{ "_id" : ObjectId("52210e1e0db96bf1b80f9eec"), "name" : "Lee", "zip" : 94456 }
+{ "_id" : ObjectId("52210e1e0db96bf1b80f9eed"), "name" : "Jenny", "zip" : 33101 }
+{ "_id" : ObjectId("52210e280db96bf1b80f9eee"), "name" : "Srinivas", "zip" : 1089 }
+&gt; 
+</code></pre>
+
+<p>其中ObjectId是用来唯一标识每条记录或每个文档。</p>
+
+<p>文档的ObjectId存储在其_id属性里。</p>
+
+<p>插入记录时，任何唯一值都可以成为ObjectId，唯一性由开发者保障。如果不提供_id值，MongoDB会创建并插入一个适当的唯一标识符。自动生成的标识符为BSON格式，即二进制的JSON：</p>
+
+<ul>
+<li>BSON ObjectId是一个12字节的值。</li>
+<li>前4个字节是创建时间（秒数）</li>
+<li>接下来3个字节表示机器标识符</li>
+<li>跟着2个字节表示进程标识符</li>
+<li>最后三个字节表示计数器</li>
+</ul><h3 class="wmd-title" id="更新数据">3.更新数据</h3>
+
+<p>update方法，第一个参数为“查找的条件”，第二个参数为“更新的值”</p>
+
+<pre><code>&gt; db.location.update({name:"Lee"},{zip:94129})
+</code></pre><h3 class="wmd-title" id="删除数据">4.删除数据</h3>
+
+<p>remove方法，参数为“查找的条件”，remove中如果不带参数将删除所有数据</p>
